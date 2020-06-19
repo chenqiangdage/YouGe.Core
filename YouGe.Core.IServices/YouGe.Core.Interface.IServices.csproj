@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="IManager\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\YouGe.Core.DBEntitys\YouGe.Core.DBEntitys.csproj" />
+    <ProjectReference Include="..\YouGe.Core.Model\YouGe.Core.Models.csproj" />
+  </ItemGroup>
+</Project>
