@@ -45,18 +45,36 @@ namespace YouGe.Core.ManagerApi
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                    };
-            });
+                //使用identityService 
+              .AddJwtBearer("Bearer", options =>
+              {
+                  //指定授权地址
+                  options.Authority = "http://localhost:6004";
+                  //获取或设置元数据地址或权限是否需要HTTPS。默认值为true。这应该只在开发环境中禁用。
+                  options.RequireHttpsMetadata = false;
+                  //获取或设置任何接收到的OpenIdConnect令牌的访问群体。
+                  options.Audience = "api1";
+
+                  //设置验证时间时要应用的时钟偏移，即token多久验证一次，默认为5分钟
+                  options.TokenValidationParameters.ClockSkew = TimeSpan.FromMinutes(1);
+                  //指示令牌是否必须具有“过期”值
+                  options.TokenValidationParameters.RequireExpirationTime = true;
+              });
+
+            //本地授权
+            //.AddJwtBearer(x =>
+            //{
+            //    x.RequireHttpsMetadata = false;
+            //    x.SaveToken = true;
+            //    x.TokenValidationParameters = new TokenValidationParameters
+            //        {
+            //        ValidateIssuerSigningKey = true,
+            //        IssuerSigningKey = new SymmetricSecurityKey(key),
+            //        ValidateIssuer = false,
+            //        ValidateAudience = false
+            //        };
+            //});
+
             #endregion
 
             #region swagger ui
