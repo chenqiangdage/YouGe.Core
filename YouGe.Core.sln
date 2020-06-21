@@ -46,7 +46,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouGe.Core.ClientApi", "You
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YouGe.Core.ManagerApi", "YouGe.Core.ManagerApi\YouGe.Core.ManagerApi.csproj", "{9080072E-6BE4-408F-A291-7E2BD90A1FEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouGe.Core.IdentityServer", "YouGe.Core.IdentityServer\YouGe.Core.IdentityServer.csproj", "{8A90220A-C57C-4573-90C1-00A50175D610}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouGe.Core.IdentityService", "YouGe.Core.IdentityService\YouGe.Core.IdentityService.csproj", "{16BC4D88-5DF6-403F-A252-FEB9961FEED4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -106,10 +106,10 @@ Global
 		{9080072E-6BE4-408F-A291-7E2BD90A1FEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9080072E-6BE4-408F-A291-7E2BD90A1FEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9080072E-6BE4-408F-A291-7E2BD90A1FEE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8A90220A-C57C-4573-90C1-00A50175D610}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A90220A-C57C-4573-90C1-00A50175D610}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A90220A-C57C-4573-90C1-00A50175D610}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A90220A-C57C-4573-90C1-00A50175D610}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16BC4D88-5DF6-403F-A252-FEB9961FEED4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16BC4D88-5DF6-403F-A252-FEB9961FEED4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16BC4D88-5DF6-403F-A252-FEB9961FEED4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16BC4D88-5DF6-403F-A252-FEB9961FEED4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -128,7 +128,7 @@ Global
 		{432A230B-4266-4E65-BBCA-40D39FCCEEAE} = {C36F50F5-FF92-4572-8CEB-6CB3279899C8}
 		{72A367DF-D8B4-4F17-9D99-FF1CF03F8304} = {3EBA47BF-F8D3-4921-BD8E-AB6AF8A4A573}
 		{9080072E-6BE4-408F-A291-7E2BD90A1FEE} = {3EBA47BF-F8D3-4921-BD8E-AB6AF8A4A573}
-		{8A90220A-C57C-4573-90C1-00A50175D610} = {3EBA47BF-F8D3-4921-BD8E-AB6AF8A4A573}
+		{16BC4D88-5DF6-403F-A252-FEB9961FEED4} = {3EBA47BF-F8D3-4921-BD8E-AB6AF8A4A573}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF22B3F2-3413-4DBE-9F20-EC81A8519B05}
