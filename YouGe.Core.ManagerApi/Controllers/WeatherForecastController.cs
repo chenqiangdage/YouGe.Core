@@ -9,7 +9,7 @@ using YouGe.Core.Models.DTModel.Manager;
 using YouGe.Core.Interface.IServices.IManager;
 namespace YouGe.Core.ManagerApi.Controllers
 {
-    [Authorize]
+   
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -28,7 +28,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         }
         
         [HttpGet]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles ="admin")]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();

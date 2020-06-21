@@ -44,13 +44,14 @@ namespace YouGe.Core.Services.Manager
             KeyValuePair<string,string>?  tuser  = users.Where(u => u.Key == username).FirstOrDefault();
             if (tuser == null) return null;
 
-                claimsIdentity.AddClaims(new[]
+
+            claimsIdentity.AddClaims(new[]
                 {
                 new Claim( ClaimTypes.Email, "xhl.jonny@gmail.com"),
                 new Claim( "ManageId", "admin"),
                 new Claim(ClaimTypes.Role,tuser.Value.Value)
                 });
-            
+
             var key = Encoding.ASCII.GetBytes(_appSettings.JwtSecret);
             var handler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor

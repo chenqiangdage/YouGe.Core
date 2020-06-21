@@ -37,7 +37,7 @@ namespace YouGe.Core.ClientApi
           Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.UseUrls("http://*:8810").UseStartup<Startup>();
+                webBuilder.UseStartup<Startup>();
             })
             .ConfigureLogging(logging =>
             {

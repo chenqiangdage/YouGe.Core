@@ -45,35 +45,37 @@ namespace YouGe.Core.ManagerApi
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                //使用identityService 
-              .AddJwtBearer("Bearer", options =>
-              {
-                  //指定授权地址
-                  options.Authority = "http://localhost:6004";
-                  //获取或设置元数据地址或权限是否需要HTTPS。默认值为true。这应该只在开发环境中禁用。
-                  options.RequireHttpsMetadata = false;
-                  //获取或设置任何接收到的OpenIdConnect令牌的访问群体。
-                  options.Audience = "api1";
-
-                  //设置验证时间时要应用的时钟偏移，即token多久验证一次，默认为5分钟
-                  options.TokenValidationParameters.ClockSkew = TimeSpan.FromMinutes(1);
-                  //指示令牌是否必须具有“过期”值
-                  options.TokenValidationParameters.RequireExpirationTime = true;
-              });
-
-            //本地授权
-            //.AddJwtBearer(x =>
+            //使用identityService 
+            //.AddJwtBearer("Bearer", options =>
             //{
-            //    x.RequireHttpsMetadata = false;
-            //    x.SaveToken = true;
-            //    x.TokenValidationParameters = new TokenValidationParameters
-            //        {
-            //        ValidateIssuerSigningKey = true,
-            //        IssuerSigningKey = new SymmetricSecurityKey(key),
-            //        ValidateIssuer = false,
-            //        ValidateAudience = false
-            //        };
+            //    //指定授权地址
+            //    options.Authority = "http://localhost:5000";
+            //    //获取或设置元数据地址或权限是否需要HTTPS。默认值为true。这应该只在开发环境中禁用。
+            //    options.RequireHttpsMetadata = false;
+            //    //获取或设置任何接收到的OpenIdConnect令牌的访问群体。
+            //    options.Audience = "user_api";
+
+            //    //设置验证时间时要应用的时钟偏移，即token多久验证一次，默认为5分钟
+            //    options.TokenValidationParameters.ClockSkew = TimeSpan.FromMinutes(20);
+            //    //指示令牌是否必须具有“过期”值
+            //    options.TokenValidationParameters.RequireExpirationTime = true;
             //});
+
+            //本地认证
+           .AddJwtBearer(x =>
+           {
+               x.RequireHttpsMetadata = false;
+               x.SaveToken = true;
+               x.TokenValidationParameters = new TokenValidationParameters
+               {
+                   ValidateIssuerSigningKey = true,
+                   IssuerSigningKey = new SymmetricSecurityKey(key),//token.Secret)),
+                   ValidIssuer = "webapi.cn",//token.Issuer,
+                   ValidAudience = "WebApi",//token.Audience,
+                   ValidateIssuer = true,
+                   ValidateAudience = true
+               };
+           });
 
             #endregion
 
@@ -92,7 +94,7 @@ namespace YouGe.Core.ManagerApi
                 options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
                 //在header中添加token，传递到后台
                 options.OperationFilter<SecurityRequirementsOperationFilter>();
-                options.AddSecurityDefinition("ManagerApi Auth", new OpenApiSecurityScheme
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Scheme = JwtBearerDefaults.AuthenticationScheme,
                     BearerFormat = "JWT",
@@ -101,20 +103,31 @@ namespace YouGe.Core.ManagerApi
                     In = ParameterLocation.Header,//jwt默认存放Authorization信息的位置(请求头中)
                     Type = SecuritySchemeType.ApiKey
                 });
-               
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme{
+                                Reference = new OpenApiReference {
+                                            Type = ReferenceType.SecurityScheme,
+                                            Id = "Bearer"}
+                           },new string[] { }
+                        }
+                    });
+
                 #endregion
             });
             #endregion
 
             //根据策略授权  
             //[Authorize(Policy = "Admin")]
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Client", policy => policy.RequireRole("Client").Build());//单独角色
-                options.AddPolicy("Admin", policy => policy.RequireRole("Admin").Build());
-                options.AddPolicy("SystemOrAdmin", policy => policy.RequireRole("Admin", "System"));//或的关系
-                options.AddPolicy("SystemAndAdmin", policy => policy.RequireRole("Admin").RequireRole("System"));//且的关系
-            });
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("Client", policy => policy.RequireRole("Client").Build());//单独角色
+            //    options.AddPolicy("Admin", policy => policy.RequireRole("Admin").Build());
+            //    options.AddPolicy("SystemOrAdmin", policy => policy.RequireRole("Admin", "System"));//或的关系
+            //    options.AddPolicy("SystemAndAdmin", policy => policy.RequireRole("Admin").RequireRole("System"));//且的关系
+            //});
+
             services.AddControllers();
         }
         /// <summary>
@@ -161,17 +174,19 @@ namespace YouGe.Core.ManagerApi
                 app.UseDeveloperExceptionPage();
             }
             // 开启swagger ui
+           
+            app.UseRouting();
+
+
+            //开启认证授权 放在route之后，endpoints之前
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "有个 Core后台API");
             });
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

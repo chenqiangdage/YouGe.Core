@@ -38,7 +38,7 @@ namespace YouGe.Core.ManagerApi
             .UseServiceProviderFactory(new AutofacServiceProviderFactory()) //<--NOTE THIS
            .ConfigureWebHostDefaults(webBuilder =>
            {
-               webBuilder.UseUrls("http://*:8809").UseStartup<Startup>();
+               webBuilder.UseStartup<Startup>();
            })
            .ConfigureLogging(logging =>
            {
