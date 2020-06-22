@@ -12,58 +12,49 @@ using YouGe.Core.Models.System;
 
 namespace YouGe.Core.Services.Manager
 {
-    public class UserAuthService: IUserAuthService
+    public class UserAuthService : IUserAuthService
     {
-        //mock data <user,role>
-        private   Dictionary<string, string> users = new Dictionary<string, string>
-        {
-            { "admin", "admin" },
-            { "jonny", "user" },
-            { "xhl", "user" },
-            { "james", "system" }
-        };       
+        private readonly IDictionary<string, string> users = new Dictionary<string, string>
+    {
+        { "admin", "admin" },
+        { "jonny", "jonny" },
+        { "xhl", "xhl" },
+        { "james", "james" }
+    };
+        public IDictionary<string, string> Tokens { get; } = new Dictionary<string, string>();
 
-        private readonly AppSettings _appSettings;
-        public UserAuthService(IOptions<AppSettings> appSettings)
-        {
-            _appSettings = appSettings.Value;
-        }       
-        /// <summary>
-        /// 用户认证获取信息 token
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
         public ClientUser Authenticate(string username, string password)
         {
-            ClientUser user = new ClientUser();
-            user.Id = 1;
-            var claimsIdentity = new ClaimsIdentity(new[]{
-            new Claim(ClaimTypes.Name,username)
-            });
-            KeyValuePair<string,string>?  tuser  = users.Where(u => u.Key == username).FirstOrDefault();
-            if (tuser == null) return null;
-
-
-            claimsIdentity.AddClaims(new[]
+            ClientUser cu = new ClientUser();
+            cu.Id = 1212;
+                 var claimsIdentity = new ClaimsIdentity(new[]{
+            new Claim(ClaimTypes.Name,username)});
+            if (!users.Any(u => u.Key == username && u.Value == password))
+            {
+                return null;
+            }
+            if (username == "admin")
+            {
+                claimsIdentity.AddClaims(new[]
                 {
                 new Claim( ClaimTypes.Email, "xhl.jonny@gmail.com"),
                 new Claim( "ManageId", "admin"),
-                new Claim(ClaimTypes.Role,tuser.Value.Value)
-                });
-
-            var key = Encoding.ASCII.GetBytes(_appSettings.JwtSecret);
+                new Claim(ClaimTypes.Role,"admin")
+            });
+            }
             var handler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = claimsIdentity,
-                Expires = DateTime.Now.AddMinutes(10),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Expires = DateTime.Now.AddMinutes(3),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secretsecretsecret")), SecurityAlgorithms.HmacSha256),
             };
             var securityToken = handler.CreateToken(tokenDescriptor);
             var token = handler.WriteToken(securityToken);
-            user.Token =token;
-            return user;
-        }
+            Tokens.Add(token, username);
+            cu.Token = token;
+            return cu;
+        } 
+        
     }
 }

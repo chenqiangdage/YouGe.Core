@@ -26,9 +26,10 @@ namespace YouGe.Core.ManagerApi.Controllers
             _logger = logger;
             _userAuthService = userAuthService;
         }
+
         
         [HttpGet]
-        [Authorize(Roles ="admin")]
+        [Authorize(Roles = "admin")]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();
@@ -41,7 +42,7 @@ namespace YouGe.Core.ManagerApi.Controllers
             .ToArray();
         }
 
-        [AllowAnonymous]
+       [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] LoginModel model)
         {
