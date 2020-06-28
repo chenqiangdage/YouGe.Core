@@ -36,7 +36,10 @@ namespace YouGe.Core.ManagerApi
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddControllers();
+
             #region swagger ui
+            //使用自身的
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -54,7 +57,18 @@ namespace YouGe.Core.ManagerApi
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secretsecretsecret"))
                 };
             });
-         
+
+            //使用identityserver 
+
+            //services.AddAuthentication("Bearer")
+            //   .AddJwtBearer("Bearer", options =>
+            //   {
+            //       options.Authority = "http://localhost:5000";
+            //       options.RequireHttpsMetadata = false;
+            //       options.Audience = "user_api";
+            //   });
+
+
             services.AddSwaggerGen(options =>
             {
                 var scheme = new OpenApiSecurityScheme()
@@ -65,6 +79,7 @@ namespace YouGe.Core.ManagerApi
                     //头名称
                     Name = "Authorization", //这个不能动，一定要一幕一样
                     Type = SecuritySchemeType.ApiKey,
+                   
                     Description = "Bearer （Token） Bearer {token}注意有空格 "
                 };
                 options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, scheme);
@@ -77,7 +92,9 @@ namespace YouGe.Core.ManagerApi
                              {
                                  Type = ReferenceType.SecurityScheme,
                                  Id = "Bearer"
+                               
                              }
+                            
                          },
                          new string[] {}
                      }
@@ -95,7 +112,9 @@ namespace YouGe.Core.ManagerApi
 
             
 
-            services.AddControllers();
+           
+
+
         }
         /// <summary>
         /// called by autofac 
