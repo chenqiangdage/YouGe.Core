@@ -11,6 +11,7 @@
     <ProjectReference Include="..\YouGe.Core.Model\YouGe.Core.Models.csproj" />
     <ProjectReference Include="..\YouGe.Core.Common\YouGe.Core.Common.csproj" />
     <ProjectReference Include="..\YouGe.Core.IServices\YouGe.Core.Interface.IServices.csproj" />
+    <ProjectReference Include="..\YouGe.Core.IRepositorys\YouGe.Core.Interface.IRepositorys.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.6.0" />

@@ -4,4 +4,12 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\YouGe.Core.DBEntitys\YouGe.Core.DBEntitys.csproj" />
+    <ProjectReference Include="..\YouGe.Core.IRepositorys\YouGe.Core.Interface.IRepositorys.csproj" />
+    <ProjectReference Include="..\YouGe.Core.Model\YouGe.Core.Models.csproj" />
+    <ProjectReference Include="..\YouGe.Core.IServices\YouGe.Core.Interface.IServices.csproj" />
+    <ProjectReference Include="..\YouGe.Core.IDbContexts\YouGe.Core.Interface.IDbContexts.csproj" />
+    <ProjectReference Include="..\YouGe.Core.Common\YouGe.Core.Common.csproj" />
+  </ItemGroup>
 </Project>
