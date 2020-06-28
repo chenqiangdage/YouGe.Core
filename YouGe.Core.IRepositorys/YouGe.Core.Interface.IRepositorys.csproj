@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\YouGe.Core.DBEntitys\YouGe.Core.DBEntitys.csproj" />
+    <ProjectReference Include="..\YouGe.Core.Model\YouGe.Core.Models.csproj" />
+  </ItemGroup>
 </Project>
