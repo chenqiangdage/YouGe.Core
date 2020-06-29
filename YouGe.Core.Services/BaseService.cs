@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 
-namespace YouGe.Core.Repositorys
+namespace YouGe.Core.Services
 {
     public abstract class BaseService<T, TKey> : IService<T, TKey> where T : class, IBaseModel<TKey>
     {
