@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Sys\" />
     <Folder Include="Qrtz\" />
+    <Folder Include="Sys\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="EmptyClass.cs" />

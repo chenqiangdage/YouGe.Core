@@ -5,7 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTModel\" />
     <Folder Include="DTModel\Manager\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YouGe.Core.Common\YouGe.Core.Common.csproj" />
+    <ProjectReference Include="..\YouGe.Core.DBEntitys\YouGe.Core.DBEntitys.csproj" />
   </ItemGroup>
 </Project>
