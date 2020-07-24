@@ -95,7 +95,7 @@ namespace YouGe.Core.Commons.SystemConst
         /// <summary>
         ///  用户名称
         /// <summary>
-        public static readonly string JWT_USERNAME = Claims.SUBJECT;
+        public static readonly string JWT_USERNAME = "sub";
 
         /// <summary>
         ///  用户头像

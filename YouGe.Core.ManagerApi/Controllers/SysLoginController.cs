@@ -85,7 +85,7 @@ namespace YouGe.Core.ManagerApi.Controllers
             LoginUser loginUser = tokenService.getLoginUser(this.Request);
             // 用户信息
             SysUser user = loginUser.user;
-            List<SysMenu> menus = menuService.selectMenuTreeByUserId(user.getUserId());
+            List<SysMenu> menus = menuService.selectMenuTreeByUserId(user.Id);
             return AjaxReponseBase.Success(menuService.buildMenus(menus));
         }
     }

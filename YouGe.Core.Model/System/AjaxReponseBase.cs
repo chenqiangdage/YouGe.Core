@@ -51,6 +51,17 @@ namespace YouGe.Core.Models.System
                 this.Add(DATA_TAG, data);
             }            
         }
+
+
+        /// <summary>
+        /// 返回成功消息
+        /// </summary>
+        /// <returns></returns>
+        public static AjaxReponseBase Success(object data)
+        {
+            return AjaxReponseBase.Success(SystemConst.OPERATE_SUCESS, data);
+        }
+
         /// <summary>
         /// 返回成功消息
         /// </summary>
