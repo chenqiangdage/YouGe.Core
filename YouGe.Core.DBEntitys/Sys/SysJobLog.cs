@@ -11,7 +11,7 @@ namespace YouGe.Core.DBEntitys.Sys
         /// <summary>
         /// 任务日志ID
         /// </summary>
-        [Column("job_id")]
+        [Column("job_log_id")]
         public override int Id { get; set; }
         /// <summary>
         /// 任务名称
