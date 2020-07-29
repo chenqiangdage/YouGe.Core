@@ -7,11 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.DynamicProxy;
+using CSRedis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Redis;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,6 +22,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
+using YouGe.Core.Common.Helper;
 using YouGe.Core.Models.System;
 
 namespace YouGe.Core.ManagerApi
@@ -110,9 +114,16 @@ namespace YouGe.Core.ManagerApi
             });
             #endregion
 
-            
+            // eg 1.单个redis实现 普通模式
+            //CSRedisClient csredis = new CSRedisClient("127.0.0.1:6379,password=,defaultDatabase=csredis,prefix=csredis-example");
+            //eg 2.单个redis，使用appsettings.json中的配置项
+            IConfigurationSection configurationSection = Configuration.GetSection("CsRedisConfig:DefaultConnectString");
+            CSRedisClient csredis = new CSRedisClient(configurationSection.Value);
+            //初始化 RedisHelper
+            YouGeRedisHelper.Initialization(csredis);
+            //注册mvc分布式缓存
+            services.AddSingleton<IDistributedCache>(new CSRedisCache(RedisHelper.Instance));
 
-           
 
 
         }
