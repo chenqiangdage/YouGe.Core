@@ -44,6 +44,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         [HttpPost("login")]         
         public AjaxReponseBase Login([FromBody] LoginModel model)
         {
+            
             AjaxReponseBase response =  AjaxReponseBase.Success();
             // 生成令牌
             string token = loginService.login(model.username, model.password, model.code,

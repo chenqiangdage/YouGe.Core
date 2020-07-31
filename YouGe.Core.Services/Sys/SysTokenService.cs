@@ -7,6 +7,12 @@ using YouGe.Core.Models.DTModel.Sys;
 using YouGe.Core.Commons;
 using YouGe.Core.Commons.SystemConst;
 using YouGe.Core.Common.Helper;
+using YouGe.Core.Common.Extensions;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Linq;
+using YouGe.Core.Commons.Helper;
 
 namespace YouGe.Core.Services.Sys
 {
@@ -19,19 +25,32 @@ namespace YouGe.Core.Services.Sys
         private static readonly long MILLIS_MINUTE_TEN = 20 * 60 * 1000L;
         public string createToken(LoginUser loginUser)
         {
-            // string token = IdUtils.fastUUID();
-            string token = Guid.NewGuid().ToString().Replace("-","");
-            loginUser.token =  token;
+            // string token = IdUtils.fastUUID(); // TO DO 
+            string token = Guid.NewGuid().ToString().Replace("-", "");
+            loginUser.token = token;
             setUserAgent(loginUser);
             refreshToken(loginUser);
-            Dictionary<string, object> claims = new Dictionary<string, object>();
-            claims.Add(SystemConst.LOGIN_USER_KEY, token);
+            var claims = new Claim[] {
+                new Claim(SystemConst.LOGIN_USER_KEY, token)
+            };             
             return createToken(claims);
         }
 
-        public string createToken(Dictionary<string, object> claims)
-        {
-            throw new NotImplementedException();
+        public string createToken(Claim[] claims)
+        {         
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("1234567890123456"));
+            var token = new JwtSecurityToken(
+                issuer: "YouGe.Core",
+                audience: "YouGe.Core",
+                claims: claims,
+                notBefore: DateTime.Now,
+                expires: DateTime.Now.AddHours(1),
+                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha512)
+            );
+
+            var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+            return jwtToken;
+ 
         }
 
         public void delLoginUser(string token)
@@ -49,45 +68,61 @@ namespace YouGe.Core.Services.Sys
             string token = getToken(request);
             if (!string.IsNullOrEmpty(token))
             {
-                Claims claims = parseToken(token);
-                // 解析对应的权限以及用户信息
-                string uuid = (string)claims.get(SystemConst.LOGIN_USER_KEY);
+                List<Claim> claims = parseToken(token);
+                // 解析对应的权限以及用户信息\
+               string uuid =  claims.Where(U => U.Type == SystemConst.LOGIN_USER_KEY).FirstOrDefault().Value;
+               // string uuid = (string)claims.get();
                 string userKey = getTokenKey(uuid);
                 LoginUser user = YouGeRedisHelper.Get<LoginUser>(userKey);
                 return user;
             }
-            return null;
-            throw new NotImplementedException();
+            return null;         
         }
 
         public string getToken(HttpRequest request)
         {
-            throw new NotImplementedException();
+            string header = "Authorization"; // TO DO 这个要写在appsettiong.json文件中
+            string token = request.Headers[header];
+             
+            if (!string.IsNullOrEmpty(token) && token.StartsWith(SystemConst.TOKEN_PREFIX))
+            {
+                token = token.Replace(SystemConst.TOKEN_PREFIX, "");
+            }
+            return token;
         }
 
         public string getTokenKey(string uuid)
         {
-            throw new NotImplementedException();
+            return SystemConst.LOGIN_TOKEN_KEY + uuid;
         }
 
         public string getUsernameFromToken(string token)
-        {
-            throw new NotImplementedException();
+        {           
+            var claims = parseToken(token);
+            return claims.Where(U => U.Type == ClaimTypes.Name).FirstOrDefault().Value;
+
         }
 
-        public object parseToken(string token)
+        public List<Claim> parseToken(string token)
         {
-            throw new NotImplementedException();
+            var jwtHandler = new JwtSecurityTokenHandler();
+            JwtSecurityToken jwtToken = jwtHandler.ReadJwtToken(token);
+            return jwtToken.Claims.ToList() ;
         }
 
         public void refreshToken(LoginUser loginUser)
         {
-            throw new NotImplementedException();
+            loginUser.loginTime = DateTimeExtensions.CurrentTimeMillis();
+            int expireTime = 30; // TO DO 这个要写在appsettiong.json文件中
+            loginUser.expireTime = loginUser.loginTime + expireTime * MILLIS_MINUTE;
+            // 根据uuid将loginUser缓存
+            string  userKey = getTokenKey(loginUser.token);
+            YouGeRedisHelper.Set(userKey, loginUser, expireTime * 60);             
         }
 
         public void setLoginUser(LoginUser loginUser)
         {
-            if (loginUser!=null && !string.IsNullOrEmpty((loginUser.token))
+            if (loginUser!=null && !string.IsNullOrEmpty((loginUser.token)))
             {
                 refreshToken(loginUser);
             }
@@ -95,18 +130,18 @@ namespace YouGe.Core.Services.Sys
 
         public void setUserAgent(LoginUser loginUser)
         {
-            UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
-            String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
-            loginUser.setIpaddr(ip);
-            loginUser.setLoginLocation(AddressUtils.getRealAddressByIP(ip));
-            loginUser.setBrowser(userAgent.getBrowser().getName());
-            loginUser.setOs(userAgent.getOperatingSystem().getName());
+
+            string ip = "TO DO ";
+            loginUser.ipaddr = ip;
+            loginUser.loginLocation = "TO DO ";
+            loginUser.browser = "TO DO ";
+            loginUser.os = "TO DO ";
         }
 
         public void verifyToken(LoginUser loginUser)
         {
             long expireTime = loginUser.expireTime;
-            long currentTime = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;            
+            long currentTime = DateTimeExtensions.CurrentTimeMillis();
             if (expireTime - currentTime <= MILLIS_MINUTE_TEN)
             {
                 refreshToken(loginUser);

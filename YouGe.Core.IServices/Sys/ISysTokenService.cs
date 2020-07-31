@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Text;
 using YouGe.Core.Models.DTModel.Sys;
 
@@ -51,12 +52,12 @@ namespace YouGe.Core.Interface.IServices.Sys
         /// 从数据声明生成令牌
         /// <param name="claims"></param> 数据声明
         /// <returns> 令牌
-        public  string createToken(Dictionary<string, object> claims);
+        public  string createToken(Claim[] claims);
         /// <summary>
         /// 从令牌中获取数据声明        
         /// <param name="token"></param> 令牌
         /// <returns> 数据声明</returns>
-        public  object parseToken(string token);
+        public List<Claim> parseToken(string token);
         /// <summary>
         /// 从令牌中获取用户名        
         /// <param name="token"></param> 令牌

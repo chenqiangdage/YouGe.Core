@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
+using System.Threading.Tasks;
 using YouGe.Core.Common.Helper;
+using YouGe.Core.Common.YouGeException;
 using YouGe.Core.Commons.SystemConst;
 using YouGe.Core.Interface.IServices.Sys;
+using YouGe.Core.Models.DTModel.Sys;
 
 namespace YouGe.Core.Services.Sys
 {
@@ -24,12 +27,21 @@ namespace YouGe.Core.Services.Sys
             YouGeRedisHelper.Del(verifyKey);             
             if (captcha == null)
             {
-                AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.jcaptcha.expire")));
+                //启动线程 记录日志
+                var ta = new Task(() =>
+                AsyncFactory.recordLogininfor(username, SystemConst.LOGIN_FAIL, "验证码已失效")
+                );
+                ta.Start();
+                 
                 throw new CaptchaExpireException();
             }
-            if (!code.equalsIgnoreCase(captcha))
+            
+            if (!string.Equals(code, captcha, StringComparison.OrdinalIgnoreCase))
             {
-                AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.jcaptcha.error")));
+                var tb = new Task(() =>
+                   AsyncFactory.recordLogininfor(username, SystemConst.LOGIN_FAIL, "验证码已失效")
+                   );
+                tb.Start();             
                 throw new CaptchaException();
             }
             // 用户验证
@@ -42,18 +54,32 @@ namespace YouGe.Core.Services.Sys
             }
             catch (Exception e)
             {
-                if (e instanceof BadCredentialsException)
-            {
-                    AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.password.not.match")));
+                if (e.Message.Contains("密码错误"))
+                {
+                    var tc = new Task(() =>
+                    AsyncFactory.recordLogininfor(username, SystemConst.LOGIN_FAIL, "用户不存在/密码错误")
+                    ) ;
+                    tc.Start();
+
+                   
                     throw new UserPasswordNotMatchException();
                 }
-            else
+                else
                 {
-                    AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, e.getMessage()));
-                    throw new CustomException(e.getMessage());
+                    var td = new Task(() =>
+                   AsyncFactory.recordLogininfor(username, SystemConst.LOGIN_FAIL, e.Message)
+                   );
+                    td.Start();
+                    
+                    throw new CustomException(e.Message);
                 }
             }
-            AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
+
+                var tf = new Task(() =>
+                    AsyncFactory.recordLogininfor(username, SystemConst.LOGIN_SUCCESS, "登录成功")
+                     );
+                tf.Start();
+            
             LoginUser loginUser = (LoginUser)authentication.getPrincipal();
             // 生成token
             return tokenService.createToken(loginUser);
