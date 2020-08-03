@@ -42,7 +42,7 @@ namespace YouGe.Core.Models.DTModel.Sys
         /// <summary>
         /// 操作系统
         /// <summary>
-        private string os { get; set; }
+        public string os { get; set; }
 
         /// <summary>
         /// 权限列表

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace YouGe.Core.Interface.IServices.Sys
 {
-   public  interface ISysloginService
+   public  interface ISysLoginService
     {
         /// <summary>
         /// 登录验证
@@ -15,5 +15,6 @@ namespace YouGe.Core.Interface.IServices.Sys
         /// <param name="pUuid">唯一标识</param>
         /// <returns>token</returns>
         public string login(string pUsername, string pPassword, string pCode, string pUuid);
+
     }
 }

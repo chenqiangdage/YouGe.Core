@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using log4net;
+using log4net.Config;
+using log4net.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using YouGe.Core.Commons;
 
 namespace YouGe.Core.ClientApi
 {
@@ -20,10 +25,12 @@ namespace YouGe.Core.ClientApi
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-
+            repository = LogManager.CreateRepository("CoreLogRepository");
+            XmlConfigurator.Configure(repository, new FileInfo("log4net.config"));
+            Log4NetRepository.loggerRepository = repository;
         }
 
-       
+        public static ILoggerRepository repository { get; set; }
 
         public IConfiguration Configuration { get; }
 
