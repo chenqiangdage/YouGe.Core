@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.DynamicProxy;
 using CSRedis;
+using log4net;
+using log4net.Config;
+using log4net.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,6 +26,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using YouGe.Core.Common.Helper;
+using YouGe.Core.Commons;
 using YouGe.Core.Models.System;
 
 namespace YouGe.Core.ManagerApi
@@ -32,8 +36,11 @@ namespace YouGe.Core.ManagerApi
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            repository = LogManager.CreateRepository("CoreLogRepository");
+            XmlConfigurator.Configure(repository, new FileInfo("log4net.config"));
+            Log4NetRepository.loggerRepository = repository;
         }
-
+        public static ILoggerRepository repository { get; set; }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.

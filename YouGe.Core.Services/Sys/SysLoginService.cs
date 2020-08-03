@@ -59,7 +59,7 @@ namespace YouGe.Core.Services.Sys
             }
             catch (Exception e)
             {
-                if (e.Message.Contains("密码错误"))
+                if ( e.Message.Contains("密码错误"))
                 {
                     var tc = new Task(() =>
                     sysLoginRepository.recordLogininfor(username, SystemConst.LOGIN_FAIL, "用户不存在/密码错误")
