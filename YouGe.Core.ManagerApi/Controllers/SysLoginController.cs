@@ -24,10 +24,10 @@ namespace YouGe.Core.ManagerApi.Controllers
 
         private readonly ILogger<SysLoginController> logger;        
         private readonly ISysTokenService tokenService;
-        private readonly ISysloginService loginService;
+        private readonly ISysLoginService loginService;
         private readonly ISysPermissionService permissionService;
         private readonly ISysMenuService menuService;
-        public SysLoginController(ILogger<SysLoginController> plogger, ISysTokenService pTokenService, ISysloginService pLoginService,
+        public SysLoginController(ILogger<SysLoginController> plogger, ISysTokenService pTokenService, ISysLoginService pLoginService,
             ISysMenuService pMenuService, ISysPermissionService pPermissionService)
         {
             logger = plogger;
