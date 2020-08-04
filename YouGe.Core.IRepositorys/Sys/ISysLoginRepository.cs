@@ -11,5 +11,7 @@ namespace YouGe.Core.Interface.IRepositorys.Sys
         void recordLogininfor(string userName,string status,string message);
 
         LoginUser loadUserByUsername(string username,string password);
+
+        
     }
 }

@@ -13,13 +13,16 @@ namespace YouGe.Core.Repositorys.Sys
 {
     public class SysLoginRepository : BaseRepository<SysLoginInfor, int>, ISysLoginRepository
     {
-        public SysLoginRepository(IYouGeDbContext dbContext) : base(dbContext)
+
+        public ISysUserRepository sysUserRepository;
+        public SysLoginRepository(IYouGeDbContext dbContext, ISysUserRepository _sysUserRepository) : base(dbContext)
         {
+            sysUserRepository = _sysUserRepository;
         }
 
         public LoginUser loadUserByUsername(string username,string password)
         {
-            SysUser user = userService.selectUserByUserName(username);
+            SysUser user = sysUserRepository.selectUserByUserName(username,password);
             if (user==null)
             {
                 Log4NetHelper.Info(string.Format(" 登录用户：{0} 不存在.",username));             
