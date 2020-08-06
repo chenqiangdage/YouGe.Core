@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
+using YouGe.Core.Interface.IDbContexts;
 
 namespace YouGe.Core.Interface.IRepositorys
 {
@@ -14,33 +14,37 @@ namespace YouGe.Core.Interface.IRepositorys
     {
         #region Insert
 
-        int Add(T entity);
-        Task<int> AddAsync(T entity);
-        int AddRange(ICollection<T> entities);
-        Task<int> AddRangeAsync(ICollection<T> entities);
+        int Add(T entity, bool useTran = false);
+        Task<int> AddAsync(T entity, bool useTran = false);
+        int AddRange(ICollection<T> entities, bool useTran = false);
+        Task<int> AddRangeAsync(ICollection<T> entities, bool useTran = false);
         void BulkInsert(IList<T> entities, string destinationTableName = null);
-        int AddBySql(string sql);
+        int AddBySql(string sql, bool useTran = false);
 
+        int AddBySql(string sql, bool useTran = false, params object[] parameters);
         #endregion
 
         #region Delete
 
-        int Delete(TKey key);
-        int Delete(Expression<Func<T, bool>> @where);
-        Task<int> DeleteAsync(Expression<Func<T, bool>> @where);
-        int DeleteBySql(string sql);
+        int Delete(TKey key, bool useTran = false);
+        int Delete(Expression<Func<T, bool>> @where, bool useTran = false);
+        Task<int> DeleteAsync(Expression<Func<T, bool>> @where, bool useTran = false);
+        int DeleteBySql(string sql, bool useTran = false);
+
+        int DeleteBySql(string sql, bool useTran = false, params object[] parameters);
         #endregion
 
         #region Update
 
-        int Edit(T entity);
-        int EditRange(ICollection<T> entities);
-        int BatchUpdate(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateExp);
-        Task<int> BatchUpdateAsync(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateExp);
-        int Update(T model, params string[] updateColumns);
-        int Update(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateFactory);
-        Task<int> UpdateAsync(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateFactory);
-        int UpdateBySql(string sql);
+        int Edit(T entity, bool useTran = false);
+        int EditRange(ICollection<T> entities, bool useTran = false);
+        int BatchUpdate(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateExp, bool useTran = false);
+        Task<int> BatchUpdateAsync(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateExp, bool useTran = false);
+        int Update(T model, bool useTran = false, params string[] updateColumns);
+        int Update(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateFactory, bool useTran = false);
+        Task<int> UpdateAsync(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateFactory, bool useTran = false);
+        int UpdateBySql(string sql, bool useTran = false);
+        int UpdateBySql(string sql, bool useTran = false, params object[] parameters);
 
         #endregion
 
@@ -62,8 +66,13 @@ namespace YouGe.Core.Interface.IRepositorys
 
         List<T> GetBySql(string sql);
 
+        List<T> GetBySql(string sql, params object[] parms);
         List<TView> GetViews<TView>(string sql);
         List<TView> GetViews<TView>(string viewName, Func<TView, bool> where);
+        public IDbContextCore GetDBContext();
+        int ExecuteSql(string sql, params object[] parameters);
+
+        Task<int> ExecuteSqlAsync(string sql, params object[] parameters);
 
         #endregion
     }

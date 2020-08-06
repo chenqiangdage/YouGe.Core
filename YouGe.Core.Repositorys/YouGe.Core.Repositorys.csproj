@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.6" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\YouGe.Core.DBEntitys\YouGe.Core.DBEntitys.csproj" />
     <ProjectReference Include="..\YouGe.Core.IRepositorys\YouGe.Core.Interface.IRepositorys.csproj" />
     <ProjectReference Include="..\YouGe.Core.Model\YouGe.Core.Models.csproj" />

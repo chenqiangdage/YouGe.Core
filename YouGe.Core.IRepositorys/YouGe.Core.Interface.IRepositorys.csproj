@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\YouGe.Core.DBEntitys\YouGe.Core.DBEntitys.csproj" />
+    <ProjectReference Include="..\YouGe.Core.IDbContexts\YouGe.Core.Interface.IDbContexts.csproj" />
     <ProjectReference Include="..\YouGe.Core.Model\YouGe.Core.Models.csproj" />
   </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace YouGe.Core.Interface.IDbContexts
 {
-    public interface  IPayGateDbContext: IMySqlDbContext
+    public   class YouGeDbContextOption : DbContextOption
     {
     }
 }

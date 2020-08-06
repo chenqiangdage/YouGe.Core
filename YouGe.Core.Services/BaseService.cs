@@ -63,9 +63,9 @@ namespace YouGe.Core.Services
             return await Repository.BatchUpdateAsync(where, updateExp);
         }
 
-        public virtual int Update(T model, params string[] updateColumns)
+        public virtual int Update(T model, bool useTran = false, params string[] updateColumns)
         {
-            return Repository.Update(model, updateColumns);
+            return Repository.Update(model, useTran, updateColumns);
         }
 
         public virtual int Update(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateFactory)

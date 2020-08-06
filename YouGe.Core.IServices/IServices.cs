@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace YouGe.Core.Interface.IServices
 {
-    public interface IService<T, TKey> :  IDisposable where T : IBaseModel<TKey>
+    public interface IService<T, TKey> : IDisposable where T : IBaseModel<TKey>
     {
         #region Insert
 
@@ -27,7 +27,7 @@ namespace YouGe.Core.Interface.IServices
         int EditRange(ICollection<T> entities);
         int BatchUpdate(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateExp);
         Task<int> BatchUpdateAsync(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateExp);
-        int Update(T model, params string[] updateColumns);
+        int Update(T model, bool useTran = false, params string[] updateColumns);
         int Update(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateFactory);
         Task<int> UpdateAsync(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateFactory);
 

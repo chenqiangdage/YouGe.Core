@@ -18,19 +18,20 @@ namespace YouGe.Core.Interface.IDbContexts
     {
         DbContextOption Option { get; }
         DatabaseFacade GetDatabase();
-        int Add<T>(T entity) where T : class;
-        Task<int> AddAsync<T>(T entity) where T : class;
-        int AddRange<T>(ICollection<T> entities) where T : class;
-        Task<int> AddRangeAsync<T>(ICollection<T> entities) where T : class;
+        int Add<T>(T entity, bool useTran) where T : class;
+
+        Task<int> AddAsync<T>(T entity, bool useTran) where T : class;
+        int AddRange<T>(ICollection<T> entities, bool useTran) where T : class;
+        Task<int> AddRangeAsync<T>(ICollection<T> entities, bool useTran) where T : class;
         int Count<T>(Expression<Func<T, bool>> @where = null) where T : class;
         Task<int> CountAsync<T>(Expression<Func<T, bool>> @where = null) where T : class;
-        int Delete<T, TKey>(TKey key) where T : BaseModel<TKey>;
+        int Delete<T, TKey>(TKey key, bool useTran) where T : BaseModel<TKey>;
         bool EnsureCreated();
         Task<bool> EnsureCreatedAsync();
         int ExecuteSqlWithNonQuery(string sql, params object[] parameters);
         Task<int> ExecuteSqlWithNonQueryAsync(string sql, params object[] parameters);
-        int Edit<T>(T entity) where T : class;
-        int EditRange<T>(ICollection<T> entities) where T : class;
+        int Edit<T>(T entity, bool useTran) where T : class;
+        int EditRange<T>(ICollection<T> entities, bool useTran) where T : class;
         bool Exist<T>(Expression<Func<T, bool>> @where = null) where T : class;
         IQueryable<T> FilterWithInclude<T>(Func<IQueryable<T>, IQueryable<T>> include, Expression<Func<T, bool>> where) where T : class;
         Task<bool> ExistAsync<T>(Expression<Func<T, bool>> @where = null) where T : class;
@@ -43,12 +44,12 @@ namespace YouGe.Core.Interface.IDbContexts
         DbSet<T> GetDbSet<T>() where T : class;
         T GetSingleOrDefault<T>(Expression<Func<T, bool>> @where = null) where T : class;
         Task<T> GetSingleOrDefaultAsync<T>(Expression<Func<T, bool>> @where = null) where T : class;
-        int Update<T>(T model, params string[] updateColumns) where T : class;
-        int Update<T>(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateFactory) where T : class;
-        Task<int> UpdateAsync<T>(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateFactory)
+        int Update<T>(T model, bool useTran = false, params string[] updateColumns) where T : class;
+        int Update<T>(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateFactory, bool useTran) where T : class;
+        Task<int> UpdateAsync<T>(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateFactory, bool useTran)
             where T : class;
-        int Delete<T>(Expression<Func<T, bool>> @where) where T : class;
-        Task<int> DeleteAsync<T>(Expression<Func<T, bool>> @where) where T : class;
+        int Delete<T>(Expression<Func<T, bool>> @where, bool useTran) where T : class;
+        Task<int> DeleteAsync<T>(Expression<Func<T, bool>> @where, bool useTran) where T : class;
         void BulkInsert<T>(IList<T> entities, string destinationTableName = null)
             where T : class;
         List<TView> SqlQuery<T, TView>(string sql, params object[] parameters)
@@ -76,5 +77,6 @@ namespace YouGe.Core.Interface.IDbContexts
         Task<T> FirstOrDefaultWithTrackingByCompileQueryAsync<T>(Expression<Func<T, bool>> filter) where T : class;
         int CountByCompileQuery<T>(Expression<Func<T, bool>> filter) where T : class;
         Task<int> CountByCompileQueryAsync<T>(Expression<Func<T, bool>> filter) where T : class;
+        public List<T> SelectBySql<T>(string sql, params object[] parms) where T : class, new();
     }
 }

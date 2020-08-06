@@ -4,4 +4,17 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.2" />
+    <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="3.0.57" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\YouGe.Core.Common\YouGe.Core.Common.csproj" />
+    <ProjectReference Include="..\YouGe.Core.DBEntitys\YouGe.Core.DBEntitys.csproj" />
+    <ProjectReference Include="..\YouGe.Core.IDbContexts\YouGe.Core.Interface.IDbContexts.csproj" />
+    <ProjectReference Include="..\YouGe.Core.Model\YouGe.Core.Models.csproj" />
+  </ItemGroup>
+
 </Project>

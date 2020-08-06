@@ -16,6 +16,7 @@ namespace YouGe.Core.Repositorys
     {
         protected readonly IDbContextCore DbContext;
 
+
         protected DbSet<T> DbSet => DbContext.GetDbSet<T>();
 
         protected BaseRepository(IDbContextCore dbContext)
@@ -26,24 +27,25 @@ namespace YouGe.Core.Repositorys
 
         #region Insert
 
-        public virtual int Add(T entity)
+        public virtual int Add(T entity, bool useTran = false)
         {
-            return DbContext.Add(entity);
+            return DbContext.Add(entity, useTran);
         }
 
-        public virtual async Task<int> AddAsync(T entity)
+
+        public virtual async Task<int> AddAsync(T entity, bool useTran = false)
         {
-            return await DbContext.AddAsync(entity);
+            return await DbContext.AddAsync(entity, useTran);
         }
 
-        public virtual int AddRange(ICollection<T> entities)
+        public virtual int AddRange(ICollection<T> entities, bool useTran = false)
         {
-            return DbContext.AddRange(entities);
+            return DbContext.AddRange(entities, useTran);
         }
 
-        public virtual async Task<int> AddRangeAsync(ICollection<T> entities)
+        public virtual async Task<int> AddRangeAsync(ICollection<T> entities, bool useTran = false)
         {
-            return await DbContext.AddRangeAsync(entities);
+            return await DbContext.AddRangeAsync(entities, useTran);
         }
 
         public virtual void BulkInsert(IList<T> entities, string destinationTableName = null)
@@ -51,28 +53,36 @@ namespace YouGe.Core.Repositorys
             DbContext.BulkInsert<T>(entities, destinationTableName);
         }
 
-        public int AddBySql(string sql)
+        public int AddBySql(string sql, bool useTran = false)
         {
             return DbContext.ExecuteSqlWithNonQuery(sql);
         }
 
+        public int AddBySql(string sql, bool useTran = false, params object[] parameters)
+        {
+            return DbContext.ExecuteSqlWithNonQuery(sql, parameters);
+        }
         #endregion
 
         #region Update
 
-        public int DeleteBySql(string sql)
+        public int DeleteBySql(string sql, bool useTran = false)
         {
             return DbContext.ExecuteSqlWithNonQuery(sql);
         }
 
-        public virtual int Edit(T entity)
+        public int DeleteBySql(string sql, bool useTran = false, params object[] parameters)
         {
-            return DbContext.Edit<T>(entity);
+            return DbContext.ExecuteSqlWithNonQuery(sql, parameters);
+        }
+        public virtual int Edit(T entity, bool useTran = false)
+        {
+            return DbContext.Edit<T>(entity, useTran);
         }
 
-        public virtual int EditRange(ICollection<T> entities)
+        public virtual int EditRange(ICollection<T> entities, bool useTran = false)
         {
-            return DbContext.EditRange(entities);
+            return DbContext.EditRange(entities, useTran);
         }
         /// <summary>
         /// update query datas by columns.
@@ -81,53 +91,56 @@ namespace YouGe.Core.Repositorys
         /// <param name="where"></param>
         /// <param name="updateExp"></param>
         /// <returns></returns>
-        public virtual int BatchUpdate(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateExp)
+        public virtual int BatchUpdate(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateExp, bool useTran = false)
         {
-            return DbContext.Update(where, updateExp);
+            return DbContext.Update(where, updateExp, useTran);
         }
 
-        public virtual async Task<int> BatchUpdateAsync(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateExp)
+        public virtual async Task<int> BatchUpdateAsync(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateExp, bool useTran = false)
         {
-            return await DbContext.UpdateAsync(@where, updateExp);
+            return await DbContext.UpdateAsync(@where, updateExp, useTran);
         }
-        public virtual int Update(T model, params string[] updateColumns)
+        public virtual int Update(T model, bool useTran = false, params string[] updateColumns)
         {
-            DbContext.Update(model, updateColumns);
+            DbContext.Update(model, useTran, updateColumns);
             return DbContext.SaveChanges();
         }
 
-        public virtual int Update(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateFactory)
+        public virtual int Update(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateFactory, bool useTran = false)
         {
-            return DbContext.Update(where, updateFactory);
+            return DbContext.Update(where, updateFactory, useTran);
         }
 
-        public virtual async Task<int> UpdateAsync(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateFactory)
+        public virtual async Task<int> UpdateAsync(Expression<Func<T, bool>> @where, Expression<Func<T, T>> updateFactory, bool useTran = false)
         {
-            return await DbContext.UpdateAsync(where, updateFactory);
+            return await DbContext.UpdateAsync(where, updateFactory, useTran);
         }
 
-        public int UpdateBySql(string sql)
+        public int UpdateBySql(string sql, bool useTran = false)
         {
             return DbContext.ExecuteSqlWithNonQuery(sql);
         }
-
+        public int UpdateBySql(string sql, bool useTran = false, params object[] parameters)
+        {
+            return DbContext.ExecuteSqlWithNonQuery(sql, parameters);
+        }
         #endregion
 
         #region Delete
 
-        public virtual int Delete(TKey key)
+        public virtual int Delete(TKey key, bool useTran = false)
         {
-            return DbContext.Delete<T, TKey>(key);
+            return DbContext.Delete<T, TKey>(key, useTran);
         }
 
-        public virtual int Delete(Expression<Func<T, bool>> @where)
+        public virtual int Delete(Expression<Func<T, bool>> @where, bool useTran = false)
         {
-            return DbContext.Delete(where);
+            return DbContext.Delete(where, useTran);
         }
 
-        public virtual async Task<int> DeleteAsync(Expression<Func<T, bool>> @where)
+        public virtual async Task<int> DeleteAsync(Expression<Func<T, bool>> @where, bool useTran = false)
         {
-            return await DbContext.DeleteAsync(where);
+            return await DbContext.DeleteAsync(where, useTran);
         }
 
 
@@ -235,11 +248,17 @@ namespace YouGe.Core.Repositorys
             return DbContext.SqlQuery<T, T>(sql);
         }
 
+        public List<T> GetBySql(string sql, params object[] parms)
+        {
+            return DbContext.SqlQuery<T, T>(sql, parms);
+        }
+
         public List<TView> GetViews<TView>(string sql)
         {
             var list = DbContext.SqlQuery<T, TView>(sql);
             return list;
         }
+
 
         public List<TView> GetViews<TView>(string viewName, Func<TView, bool> @where)
         {
@@ -257,6 +276,21 @@ namespace YouGe.Core.Repositorys
         public void Dispose()
         {
             DbContext?.Dispose();
+        }
+
+        public IDbContextCore GetDBContext()
+        {
+            return this.DbContext;
+        }
+
+        public int ExecuteSql(string sql, params object[] parameters)
+        {
+            return this.DbContext.GetDatabase().ExecuteSqlCommand(sql, parameters);
+        }
+
+        public Task<int> ExecuteSqlAsync(string sql, params object[] parameters)
+        {
+            return this.DbContext.GetDatabase().ExecuteSqlCommandAsync(sql, parameters);
         }
     }
 }
