@@ -130,7 +130,14 @@ namespace YouGe.Core.ManagerApi
             YouGeRedisHelper.Initialization(csredis);
             //注册mvc分布式缓存
             services.AddSingleton<IDistributedCache>(new CSRedisCache(RedisHelper.Instance));
-
+            services.Configure<GateWayDbContextOption>(options =>
+            {
+                options.TagName = "db2";
+                options.ConnectionString = Configuration.GetConnectionString("PayGatewayDB");
+                options.ModelAssemblyName = "Ehome.GateWay.Pay.DBEntitys";//这里必须是数据库实体类所在的项目
+                options.IsOutputSql = false;
+            }
+          );
 
 
         }
