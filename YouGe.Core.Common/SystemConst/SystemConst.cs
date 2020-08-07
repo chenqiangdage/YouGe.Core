@@ -35,12 +35,12 @@ namespace YouGe.Core.Commons.SystemConst
         /// <summary>
         ///  通用成功标识
         /// <summary>
-        public static readonly string SUCCESS = "0";
+        public static readonly char SUCCESS = '0';
 
         /// <summary>
         ///  通用失败标识
         /// <summary>
-        public static readonly string FAIL = "1";
+        public static readonly char FAIL = '1';
 
         /// <summary>
         ///  登录成功

@@ -8,7 +8,7 @@ namespace YouGe.Core.Interface.IRepositorys.Sys
 {
     public interface ISysLoginRepository : IRepository<SysLoginInfor, int>
     {
-        void recordLogininfor(string userName,string status,string message);
+        void recordLogininfor(string userName,char status,string message);
 
        
 

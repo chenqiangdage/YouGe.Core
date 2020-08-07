@@ -8,6 +8,7 @@ using YouGe.Core.Models.DTModel.Sys;
 using YouGe.Core.Common.YouGeException;
 using YouGe.Core.Commons.Helper;
 using YouGe.Core.Common.SystemConst;
+using System.Linq;
 
 namespace YouGe.Core.Repositorys.Sys
 {
@@ -18,7 +19,7 @@ namespace YouGe.Core.Repositorys.Sys
         }
         SysUser ISysUserRepository.selectUserByUserName(string username, string password)
         {
-            throw new NotImplementedException();
+            return this.Get(u => u.UserName == username && u.Password == password).FirstOrDefault();             
         }
     }
 }

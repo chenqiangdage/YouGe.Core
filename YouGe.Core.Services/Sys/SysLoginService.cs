@@ -39,7 +39,7 @@ namespace YouGe.Core.Services.Sys
             {
                 //启动线程 记录日志
                 var ta = new Task(() =>
-                sysLoginRepository.recordLogininfor(username, SystemConst.LOGIN_FAIL, "验证码已失效")
+                sysLoginRepository.recordLogininfor(username, SystemConst.FAIL, "验证码已失效")
                 );
                 ta.Start();
                  
@@ -49,7 +49,7 @@ namespace YouGe.Core.Services.Sys
             if (!string.Equals(code, captcha, StringComparison.OrdinalIgnoreCase))
             {
                 var tb = new Task(() =>
-                   sysLoginRepository.recordLogininfor(username, SystemConst.LOGIN_FAIL, "验证码已失效")
+                   sysLoginRepository.recordLogininfor(username, SystemConst.FAIL, "验证码已失效")
                    );
                 tb.Start();             
                 throw new CaptchaException();
@@ -58,7 +58,7 @@ namespace YouGe.Core.Services.Sys
             {                 
                 LoginUser loginUser =  this.loadUserByUsername(username, password);
                 var tf = new Task(() =>
-                 sysLoginRepository.recordLogininfor(username, SystemConst.LOGIN_SUCCESS, "登录成功")
+                 sysLoginRepository.recordLogininfor(username, SystemConst.SUCCESS, "登录成功")
                   );
                 tf.Start();
                 // 生成token
@@ -69,7 +69,7 @@ namespace YouGe.Core.Services.Sys
                 if ( e.Message.Contains("密码错误"))
                 {
                     var tc = new Task(() =>
-                    sysLoginRepository.recordLogininfor(username, SystemConst.LOGIN_FAIL, "用户不存在/密码错误")
+                    sysLoginRepository.recordLogininfor(username, SystemConst.FAIL, "用户不存在/密码错误")
                     ) ;
                     tc.Start();
 
@@ -79,7 +79,7 @@ namespace YouGe.Core.Services.Sys
                 else
                 {
                     var td = new Task(() =>
-                   sysLoginRepository.recordLogininfor(username, SystemConst.LOGIN_FAIL, e.Message)
+                   sysLoginRepository.recordLogininfor(username, SystemConst.FAIL, e.Message)
                    );
                     td.Start();
                     

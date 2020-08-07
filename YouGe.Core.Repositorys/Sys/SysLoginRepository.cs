@@ -20,9 +20,13 @@ namespace YouGe.Core.Repositorys.Sys
           
         }
        
-        public void recordLogininfor(string userName, string status, string message)
+        public void recordLogininfor(string userName, char status, string message)
         {
-            throw new NotImplementedException();
+            SysLoginInfor model = new SysLoginInfor();
+            model.UserName = userName;
+            model.status = status;
+            model.msg = message;
+            this.Add(model);             
         }
     }
 }

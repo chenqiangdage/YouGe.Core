@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\YouGe.Core.DbContexts\YouGe.Core.DbContexts.csproj" />
     <ProjectReference Include="..\YouGe.Core.Model\YouGe.Core.Models.csproj" />
     <ProjectReference Include="..\YouGe.Core.IServices\YouGe.Core.Interface.IServices.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>

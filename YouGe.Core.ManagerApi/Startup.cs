@@ -27,6 +27,8 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using YouGe.Core.Common.Helper;
 using YouGe.Core.Commons;
+using YouGe.Core.DbContexts;
+using YouGe.Core.Interface.IDbContexts;
 using YouGe.Core.Models.System;
 
 namespace YouGe.Core.ManagerApi
@@ -130,15 +132,15 @@ namespace YouGe.Core.ManagerApi
             YouGeRedisHelper.Initialization(csredis);
             //注册mvc分布式缓存
             services.AddSingleton<IDistributedCache>(new CSRedisCache(RedisHelper.Instance));
-            services.Configure<GateWayDbContextOption>(options =>
+            services.Configure<YouGeDbContextOption>(options =>
             {
                 options.TagName = "db2";
-                options.ConnectionString = Configuration.GetConnectionString("PayGatewayDB");
-                options.ModelAssemblyName = "Ehome.GateWay.Pay.DBEntitys";//这里必须是数据库实体类所在的项目
+                options.ConnectionString = Configuration.GetConnectionString("YouGeDB");
+                options.ModelAssemblyName = "YouGe.Core.DBEntitys";//这里必须是数据库实体类所在的项目
                 options.IsOutputSql = false;
             }
-          );
-
+            );
+            services.AddDbContext<IYouGeDbContext, YouGeDbContext>(); //注入EF上下文
 
         }
         /// <summary>
@@ -173,7 +175,7 @@ namespace YouGe.Core.ManagerApi
             builder.RegisterAssemblyTypes(assemblysRepository)
                    .AsImplementedInterfaces()
                    .InstancePerDependency();
-
+            builder.RegisterType(typeof(YouGeUnitWork)).As(typeof(IYouGeUnitWork));
             #endregion
 
         }
