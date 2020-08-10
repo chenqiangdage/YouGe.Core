@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
 using YouGe.Core.Models.DTModel.Sys;
+using YouGe.Core.Models.System;
 
 namespace YouGe.Core.Interface.IServices.Sys
 {
@@ -33,7 +34,7 @@ namespace YouGe.Core.Interface.IServices.Sys
         /// 创建令牌
         /// <param name="loginUser ">用户信息</param>
         /// <returns> 令牌</returns>
-        public string createToken(LoginUser loginUser);
+        public string createToken(LoginUser loginUser, RequestBasicInfo info);
 
         /// <summary>
         /// 验证令牌有效期，相差不足20分钟，自动刷新缓存
@@ -47,7 +48,7 @@ namespace YouGe.Core.Interface.IServices.Sys
         /// <summary>
         /// 设置用户代理信息
         /// <param name="loginUser"></param> 登录信息
-        public void setUserAgent(LoginUser loginUser);
+        public void setUserAgent(LoginUser loginUser, RequestBasicInfo info);
         /// <summary>
         /// 从数据声明生成令牌
         /// <param name="claims"></param> 数据声明

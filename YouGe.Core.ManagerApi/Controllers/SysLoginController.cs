@@ -11,6 +11,7 @@ using YouGe.Core.Models.DTModel.Sys;
 using YouGe.Core.Commons.SystemConst;
 using YouGe.Core.Interface.IServices.Sys;
 using YouGe.Core.DBEntitys.Sys;
+using Microsoft.AspNetCore.Http;
 
 namespace YouGe.Core.ManagerApi.Controllers
 {
@@ -19,7 +20,7 @@ namespace YouGe.Core.ManagerApi.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    public class SysLoginController : ControllerBase
+    public class SysLoginController : YouGeController
     {
 
         private readonly ILogger<SysLoginController> logger;        
@@ -27,7 +28,8 @@ namespace YouGe.Core.ManagerApi.Controllers
         private readonly ISysLoginService loginService;
         private readonly ISysPermissionService permissionService;
         private readonly ISysMenuService menuService;
-        public SysLoginController(ILogger<SysLoginController> plogger, ISysTokenService pTokenService, ISysLoginService pLoginService,
+        protected readonly IHttpContextAccessor httpContextAccessor;
+        public SysLoginController(IHttpContextAccessor httpContextAccessor,ILogger<SysLoginController> plogger, ISysTokenService pTokenService, ISysLoginService pLoginService,
             ISysMenuService pMenuService, ISysPermissionService pPermissionService)
         {
             logger = plogger;
@@ -35,6 +37,7 @@ namespace YouGe.Core.ManagerApi.Controllers
             loginService = pLoginService;
             menuService = pMenuService;
             permissionService = pPermissionService;
+            this.httpContextAccessor = httpContextAccessor;
         }
         /// <summary>
         /// 登录方法
@@ -47,8 +50,9 @@ namespace YouGe.Core.ManagerApi.Controllers
             
             AjaxReponseBase response =  AjaxReponseBase.Success();
             // 生成令牌
+            RequestBasicInfo info = this.GetRequestInfo(httpContextAccessor);
             string token = loginService.login(model.username, model.password, model.code,
-                    model.uuid);                       
+                    model.uuid,info);                       
             response.Add(SystemConst.TOKEN, token);
             return response;
            // return Ok(response);

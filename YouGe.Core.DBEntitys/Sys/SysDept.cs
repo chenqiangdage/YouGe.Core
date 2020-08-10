@@ -5,12 +5,9 @@ using System.Text;
 
 namespace YouGe.Core.DBEntitys.Sys
 {
-    public class SysDept
-    {
-        [Table("sys_dept")]
-        public class SysConfig : BaseModel<int>
-        {
-
+    [Table("sys_dept")]
+    public class SysDept : BaseModel<int>
+    {                      
             /// <summary>
             /// 部门id
             /// </summary>
@@ -83,8 +80,5 @@ namespace YouGe.Core.DBEntitys.Sys
             public DateTime? UpdateTime { get; set; }
            
         }
-        public SysDept()
-        {
-        }
-    }
+          
 }

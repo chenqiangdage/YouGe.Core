@@ -8,6 +8,7 @@ using YouGe.Core.Models.DTModel.Sys;
 using YouGe.Core.Common.YouGeException;
 using YouGe.Core.Commons.Helper;
 using YouGe.Core.Common.SystemConst;
+using YouGe.Core.Models.System;
 
 namespace YouGe.Core.Repositorys.Sys
 {
@@ -20,7 +21,7 @@ namespace YouGe.Core.Repositorys.Sys
           
         }
        
-        public void recordLogininfor(string userName, char status, string message)
+        public void recordLogininfor(string userName, char status, string message, RequestBasicInfo info)
         {
             SysLoginInfor model = new SysLoginInfor();
             model.UserName = userName;

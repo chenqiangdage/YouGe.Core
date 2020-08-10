@@ -13,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 using YouGe.Core.Commons.Helper;
+using YouGe.Core.Models.System;
 
 namespace YouGe.Core.Services.Sys
 {
@@ -23,12 +24,12 @@ namespace YouGe.Core.Services.Sys
         protected static readonly long MILLIS_MINUTE = 60 * MILLIS_SECOND;
 
         private static readonly long MILLIS_MINUTE_TEN = 20 * 60 * 1000L;
-        public string createToken(LoginUser loginUser)
+        public string createToken(LoginUser loginUser, RequestBasicInfo info)
         {
             // string token = IdUtils.fastUUID(); // TO DO 
             string token = Guid.NewGuid().ToString().Replace("-", "");
             loginUser.token = token;
-            setUserAgent(loginUser);
+            setUserAgent(loginUser,info);
             refreshToken(loginUser);
             var claims = new Claim[] {
                 new Claim(SystemConst.LOGIN_USER_KEY, token)
@@ -128,14 +129,14 @@ namespace YouGe.Core.Services.Sys
             }
         }
 
-        public void setUserAgent(LoginUser loginUser)
+        public void setUserAgent(LoginUser loginUser, RequestBasicInfo info)
         {
 
-            string ip = "TO DO ";
-            loginUser.ipaddr = ip;
+           
+            loginUser.ipaddr = info.Ip;
             loginUser.loginLocation = "TO DO ";
-            loginUser.browser = "TO DO ";
-            loginUser.os = "TO DO ";
+            loginUser.browser =  info.UserAgent.Device.ToString();
+            loginUser.os = info.UserAgent.OS.ToString();
         }
 
         public void verifyToken(LoginUser loginUser)
