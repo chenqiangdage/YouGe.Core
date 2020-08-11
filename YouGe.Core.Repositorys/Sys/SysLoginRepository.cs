@@ -27,6 +27,9 @@ namespace YouGe.Core.Repositorys.Sys
             model.UserName = userName;
             model.status = status;
             model.msg = message;
+            model.Browser = info.UserAgent.Device.ToString();
+            model.Os = info.UserAgent.OS.ToString();
+
             this.Add(model);             
         }
     }

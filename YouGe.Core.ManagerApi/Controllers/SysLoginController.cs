@@ -12,6 +12,7 @@ using YouGe.Core.Commons.SystemConst;
 using YouGe.Core.Interface.IServices.Sys;
 using YouGe.Core.DBEntitys.Sys;
 using Microsoft.AspNetCore.Http;
+using YouGe.Core.Commons;
 
 namespace YouGe.Core.ManagerApi.Controllers
 {
@@ -53,7 +54,7 @@ namespace YouGe.Core.ManagerApi.Controllers
             RequestBasicInfo info = this.GetRequestInfo(httpContextAccessor);
             string token = loginService.login(model.username, model.password, model.code,
                     model.uuid,info);                       
-            response.Add(SystemConst.TOKEN, token);
+            response.Add(YouGeSystemConst.TOKEN, token);
             return response;
            // return Ok(response);
             

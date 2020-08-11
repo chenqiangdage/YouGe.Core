@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using YouGe.Core.Common.Helper;
 using YouGe.Core.Common.SystemConst;
 using YouGe.Core.Common.YouGeException;
+using YouGe.Core.Commons;
 using YouGe.Core.Commons.Helper;
-using YouGe.Core.Commons.SystemConst;
 using YouGe.Core.DBEntitys.Sys;
 using YouGe.Core.Interface.IRepositorys.Sys;
 using YouGe.Core.Interface.IServices.Sys;
@@ -32,7 +32,7 @@ namespace YouGe.Core.Services.Sys
 
         public string login(string username, string password, string code, string uuid, RequestBasicInfo info)
         {
-            string verifyKey = SystemConst.CAPTCHA_CODE_KEY + uuid;
+            string verifyKey = YouGeSystemConst.CAPTCHA_CODE_KEY + uuid;
 
             string captcha = YouGeRedisHelper.Get(verifyKey);
             YouGeRedisHelper.Del(verifyKey);             
@@ -40,7 +40,7 @@ namespace YouGe.Core.Services.Sys
             {
                 //启动线程 记录日志
                 var ta = new Task(() =>
-                sysLoginRepository.recordLogininfor(username, SystemConst.FAIL, "验证码已失效",info)
+                sysLoginRepository.recordLogininfor(username, YouGeSystemConst.FAIL, "验证码已失效",info)
                 );
                 ta.Start();
                  
@@ -50,7 +50,7 @@ namespace YouGe.Core.Services.Sys
             if (!string.Equals(code, captcha, StringComparison.OrdinalIgnoreCase))
             {
                 var tb = new Task(() =>
-                   sysLoginRepository.recordLogininfor(username, SystemConst.FAIL, "验证码已失效", info)
+                   sysLoginRepository.recordLogininfor(username, YouGeSystemConst.FAIL, "验证码已失效", info)
                    );
                 tb.Start();             
                 throw new CaptchaException();
@@ -59,7 +59,7 @@ namespace YouGe.Core.Services.Sys
             {                 
                 LoginUser loginUser =  this.loadUserByUsername(username, password);
                 var tf = new Task(() =>
-                 sysLoginRepository.recordLogininfor(username, SystemConst.SUCCESS, "登录成功", info)
+                 sysLoginRepository.recordLogininfor(username, YouGeSystemConst.SUCCESS, "登录成功", info)
                   );
                 tf.Start();
                 // 生成token
@@ -70,7 +70,7 @@ namespace YouGe.Core.Services.Sys
                 if ( e.Message.Contains("密码错误"))
                 {
                     var tc = new Task(() =>
-                    sysLoginRepository.recordLogininfor(username, SystemConst.FAIL, "用户不存在/密码错误", info)
+                    sysLoginRepository.recordLogininfor(username, YouGeSystemConst.FAIL, "用户不存在/密码错误", info)
                     ) ;
                     tc.Start();
 
@@ -80,7 +80,7 @@ namespace YouGe.Core.Services.Sys
                 else
                 {
                     var td = new Task(() =>
-                   sysLoginRepository.recordLogininfor(username, SystemConst.FAIL, e.Message, info)
+                   sysLoginRepository.recordLogininfor(username, YouGeSystemConst.FAIL, e.Message, info)
                    );
                     td.Start();
                     

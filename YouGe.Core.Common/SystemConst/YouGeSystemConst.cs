@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace YouGe.Core.Commons.SystemConst
+namespace YouGe.Core.Commons
 {
-    public  class SystemConst
+    public  class YouGeSystemConst
     {
         /// <summary>
         /// 操作成功
@@ -20,7 +20,7 @@ namespace YouGe.Core.Commons.SystemConst
         /// <summary>
         ///  GBK 字符集
         /// <summary>
-        public static readonly String GBK = "GBK";
+        public static readonly string GBK = "GBK";
 
         /// <summary>
         ///  http请求
