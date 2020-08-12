@@ -48,11 +48,11 @@ namespace YouGe.Core.Common.Helper
                     JObject obj = (JObject)JsonConvert.DeserializeObject(rspStr);
                     string region = obj["pro"].ToString();
                     string city = obj["city"].ToString();
-                    return string.Format("%s %s", region, city);
+                    return string.Format("{0} {1}", region, city);
                 }
                 catch (Exception e)
                 {
-                    Log4NetHelper.Info(string.Format("获取地理位置异常 {0}", ip));
+                    Log4NetHelper.Info(string.Format("获取地理位置异常 {0} {1}", ip,e.Message));
                 }            
             return address;
         }

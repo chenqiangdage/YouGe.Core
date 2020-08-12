@@ -32,7 +32,7 @@ namespace YouGe.Core.Services.Sys
             setUserAgent(loginUser,info);
             refreshToken(loginUser);
             var claims = new Claim[] {
-                new Claim(SystemConst.LOGIN_USER_KEY, token)
+                new Claim(YouGeSystemConst.LOGIN_USER_KEY, token)
             };             
             return createToken(claims);
         }
@@ -71,7 +71,7 @@ namespace YouGe.Core.Services.Sys
             {
                 List<Claim> claims = parseToken(token);
                 // 解析对应的权限以及用户信息\
-               string uuid =  claims.Where(U => U.Type == SystemConst.LOGIN_USER_KEY).FirstOrDefault().Value;
+               string uuid =  claims.Where(U => U.Type == YouGeSystemConst.LOGIN_USER_KEY).FirstOrDefault().Value;
                // string uuid = (string)claims.get();
                 string userKey = getTokenKey(uuid);
                 LoginUser user = YouGeRedisHelper.Get<LoginUser>(userKey);
@@ -85,16 +85,16 @@ namespace YouGe.Core.Services.Sys
             string header = "Authorization"; // TO DO 这个要写在appsettiong.json文件中
             string token = request.Headers[header];
              
-            if (!string.IsNullOrEmpty(token) && token.StartsWith(SystemConst.TOKEN_PREFIX))
+            if (!string.IsNullOrEmpty(token) && token.StartsWith(YouGeSystemConst.TOKEN_PREFIX))
             {
-                token = token.Replace(SystemConst.TOKEN_PREFIX, "");
+                token = token.Replace(YouGeSystemConst.TOKEN_PREFIX, "");
             }
             return token;
         }
 
         public string getTokenKey(string uuid)
         {
-            return SystemConst.LOGIN_TOKEN_KEY + uuid;
+            return YouGeSystemConst.LOGIN_TOKEN_KEY + uuid;
         }
 
         public string getUsernameFromToken(string token)
@@ -135,8 +135,8 @@ namespace YouGe.Core.Services.Sys
            
             loginUser.ipaddr = info.Ip;
             loginUser.loginLocation = "TO DO ";
-            loginUser.browser =  info.UserAgent.Device.ToString();
-            loginUser.os = info.UserAgent.OS.ToString();
+            loginUser.browser =  info.Device;
+            loginUser.os = info.Os;
         }
 
         public void verifyToken(LoginUser loginUser)

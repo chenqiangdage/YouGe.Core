@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using YouGe.Core.Common.SystemConst;
+using YouGe.Core.Commons;
 using YouGe.Core.Commons.SystemConst;
 
 namespace YouGe.Core.Models.System
@@ -59,7 +60,7 @@ namespace YouGe.Core.Models.System
         /// <returns></returns>
         public static AjaxReponseBase Success(object data)
         {
-            return AjaxReponseBase.Success(SystemConst.OPERATE_SUCESS, data);
+            return AjaxReponseBase.Success(YouGeSystemConst.OPERATE_SUCESS, data);
         }
 
         /// <summary>
@@ -68,7 +69,7 @@ namespace YouGe.Core.Models.System
         /// <returns></returns>
         public static AjaxReponseBase Success()
         {
-            return AjaxReponseBase.Success(SystemConst.OPERATE_SUCESS);
+            return AjaxReponseBase.Success(YouGeSystemConst.OPERATE_SUCESS);
         }
         /// <summary>
         /// 返回成功消息
@@ -94,7 +95,7 @@ namespace YouGe.Core.Models.System
         /// <returns></returns>
         public static AjaxReponseBase Error()
         {
-            return AjaxReponseBase.Error(SystemConst.OPERATE_FAIL);
+            return AjaxReponseBase.Error(YouGeSystemConst.OPERATE_FAIL);
         }
 
         /// <summary>

@@ -39,8 +39,9 @@ namespace YouGe.Core.Services.Sys
             if (captcha == null)
             {
                 //启动线程 记录日志
-                var ta = new Task(() =>
-                sysLoginRepository.recordLogininfor(username, YouGeSystemConst.FAIL, "验证码已失效",info)
+                 var ta = new Task(() =>
+
+                sysLoginRepository.recordLogininfor(username, YouGeSystemConst.FAIL, "验证码已失效", info)
                 );
                 ta.Start();
                  
@@ -49,19 +50,19 @@ namespace YouGe.Core.Services.Sys
             
             if (!string.Equals(code, captcha, StringComparison.OrdinalIgnoreCase))
             {
-                var tb = new Task(() =>
-                   sysLoginRepository.recordLogininfor(username, YouGeSystemConst.FAIL, "验证码已失效", info)
-                   );
-                tb.Start();             
+                // var tb = new Task(() =>
+                sysLoginRepository.recordLogininfor(username, YouGeSystemConst.FAIL, "验证码已失效", info);
+              //     );
+               // tb.Start();             
                 throw new CaptchaException();
             }         
             try
             {                 
                 LoginUser loginUser =  this.loadUserByUsername(username, password);
-                var tf = new Task(() =>
-                 sysLoginRepository.recordLogininfor(username, YouGeSystemConst.SUCCESS, "登录成功", info)
-                  );
-                tf.Start();
+                //   var tf = new Task(() =>
+                sysLoginRepository.recordLogininfor(username, YouGeSystemConst.SUCCESS, "登录成功", info);
+              //    );
+             //   tf.Start();
                 // 生成token
                 return tokenService.createToken(loginUser, info);
             }
@@ -69,20 +70,20 @@ namespace YouGe.Core.Services.Sys
             {
                 if ( e.Message.Contains("密码错误"))
                 {
-                    var tc = new Task(() =>
-                    sysLoginRepository.recordLogininfor(username, YouGeSystemConst.FAIL, "用户不存在/密码错误", info)
-                    ) ;
-                    tc.Start();
+                    //   var tc = new Task(() =>
+                    sysLoginRepository.recordLogininfor(username, YouGeSystemConst.FAIL, "用户不存在/密码错误", info);
+               //     ) ;
+               //     tc.Start();
 
                    
                     throw new UserPasswordNotMatchException();
                 }
                 else
                 {
-                    var td = new Task(() =>
-                   sysLoginRepository.recordLogininfor(username, YouGeSystemConst.FAIL, e.Message, info)
-                   );
-                    td.Start();
+                    //  var td = new Task(() =>
+                    sysLoginRepository.recordLogininfor(username, YouGeSystemConst.FAIL, e.Message, info);
+                 //  );
+                  //  td.Start();
                     
                     throw new CustomException(e.Message);
                 }

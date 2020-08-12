@@ -15,6 +15,9 @@ namespace YouGe.Core.Models.System
 
         public string RequestUrl { get; set; }
 
-        public UAParserUserAgent UserAgent { get; set; }
+        public string Device { get; set; }
+
+        public string Os { get; set; }
+         
     }
 }

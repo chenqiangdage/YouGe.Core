@@ -41,7 +41,7 @@ namespace YouGe.Core.Commons
             }
         }
 
-        public static async Task<string> GetJsonAsync(this HttpClient client, Dictionary<string, string> parameters, string url)
+        public static async Task<string> GetJsonAsync(this HttpClient client, Dictionary<string, string> parameters, string url,string encode = "GBK")
         {
             if (parameters != null)
             {
@@ -52,8 +52,14 @@ namespace YouGe.Core.Commons
             {
                 url = ConcatURL(url);
             }
-
-            string result = await client.GetStringAsync(url);
+            var result = "";
+             var response = await client.GetAsync(url);
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            using (var sr = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.GetEncoding(encode)))
+            {
+                result = sr.ReadToEnd();
+            }
+          
             return result;
         }
 

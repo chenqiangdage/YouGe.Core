@@ -51,7 +51,7 @@ namespace YouGe.Core.ManagerApi
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllers();
-
+            services.BuildAutofacServiceProvider();
             #region swagger ui
             //使用自身的
             services.AddAuthentication(options =>
@@ -134,13 +134,14 @@ namespace YouGe.Core.ManagerApi
             //注册mvc分布式缓存
             services.AddSingleton<IDistributedCache>(new CSRedisCache(RedisHelper.Instance));
             services.Configure<YouGeDbContextOption>(options =>
-            {
-                options.TagName = "db2";
-                options.ConnectionString = Configuration.GetConnectionString("YouGeDB");
-                options.ModelAssemblyName = "YouGe.Core.DBEntitys";//这里必须是数据库实体类所在的项目
-                options.IsOutputSql = false;
-            }
+                {
+                    options.TagName = "db2";
+                    options.ConnectionString = Configuration.GetConnectionString("YouGeDB");
+                    options.ModelAssemblyName = "YouGe.Core.DBEntitys";//这里必须是数据库实体类所在的项目
+                    options.IsOutputSql = false;
+                }
             );
+            //services.AddDbContext<IYouGeDbContext, YouGeDbContext>(option => { },ServiceLifetime.Scoped ); //注入EF上下文
             services.AddDbContext<IYouGeDbContext, YouGeDbContext>(); //注入EF上下文
 
         }
@@ -177,6 +178,18 @@ namespace YouGe.Core.ManagerApi
                    .AsImplementedInterfaces()
                    .InstancePerDependency();
             builder.RegisterType(typeof(YouGeUnitWork)).As(typeof(IYouGeUnitWork));
+           // builder.Register(t =>
+
+           //new YouGeDbContextOption()
+           //{
+           //    TagName = "db2",
+           //    ConnectionString = Configuration.GetConnectionString("YouGeDB"),
+           //    ModelAssemblyName = "YouGe.Core.DBEntitys",//这里必须是数据库实体类所在的项目,
+           //    IsOutputSql = false
+           //}
+           //).As<YouGeDbContextOption>().SingleInstance();
+
+            //  builder.RegisterType(typeof(YouGeDbContextOption)).As(typeof(YouGeDbContextOption));
             #endregion
 
         }

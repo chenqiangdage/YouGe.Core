@@ -26,6 +26,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\YouGe.Core.DbContexts\YouGe.Core.DbContexts.csproj" />
+    <ProjectReference Include="..\YouGe.Core.DBEntitys\YouGe.Core.DBEntitys.csproj" />
+    <ProjectReference Include="..\YouGe.Core.IDbContexts\YouGe.Core.Interface.IDbContexts.csproj" />
+    <ProjectReference Include="..\YouGe.Core.IRepositorys\YouGe.Core.Interface.IRepositorys.csproj" />
     <ProjectReference Include="..\YouGe.Core.Model\YouGe.Core.Models.csproj" />
     <ProjectReference Include="..\YouGe.Core.IServices\YouGe.Core.Interface.IServices.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
