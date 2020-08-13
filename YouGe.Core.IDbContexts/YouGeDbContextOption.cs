@@ -5,6 +5,6 @@ using System.Text;
 namespace YouGe.Core.Interface.IDbContexts
 {
     public   class YouGeDbContextOption : DbContextOption
-    {
+    {       
     }
 }

@@ -178,18 +178,7 @@ namespace YouGe.Core.ManagerApi
                    .AsImplementedInterfaces()
                    .InstancePerDependency();
             builder.RegisterType(typeof(YouGeUnitWork)).As(typeof(IYouGeUnitWork));
-           // builder.Register(t =>
-
-           //new YouGeDbContextOption()
-           //{
-           //    TagName = "db2",
-           //    ConnectionString = Configuration.GetConnectionString("YouGeDB"),
-           //    ModelAssemblyName = "YouGe.Core.DBEntitys",//这里必须是数据库实体类所在的项目,
-           //    IsOutputSql = false
-           //}
-           //).As<YouGeDbContextOption>().SingleInstance();
-
-            //  builder.RegisterType(typeof(YouGeDbContextOption)).As(typeof(YouGeDbContextOption));
+           
             #endregion
 
         }

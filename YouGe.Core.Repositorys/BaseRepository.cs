@@ -14,8 +14,7 @@ namespace YouGe.Core.Repositorys
 {
     public abstract class BaseRepository<T, TKey> : IRepository<T, TKey> where T : BaseModel<TKey>
     {
-        protected readonly IDbContextCore DbContext;
-
+        protected readonly IDbContextCore DbContext;      
 
         protected DbSet<T> DbSet => DbContext.GetDbSet<T>();
 
@@ -23,7 +22,7 @@ namespace YouGe.Core.Repositorys
         {
             DbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             DbContext.EnsureCreated();
-        }
+        }         
 
         #region Insert
 
