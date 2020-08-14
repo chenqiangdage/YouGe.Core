@@ -44,7 +44,7 @@ namespace YouGe.Core.Common.Helper
 
         public static bool internalIp(string ip)
         {            
-            return checkInternalIp(ip) || "127.0.0.1".Equals(ip);
+            return checkInternalIp(ip) || "127.0.0.1".Equals(ip) || "0.0.0.1".Equals(ip);
         }
 
         private static bool checkInternalIp(string ipv4Address)

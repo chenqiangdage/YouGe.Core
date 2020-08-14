@@ -55,9 +55,7 @@ namespace YouGe.Core.ManagerApi.Controllers
             string token = loginService.login(model.username, model.password, model.code,
                     model.uuid,info);                       
             response.Add(YouGeSystemConst.TOKEN, token);
-            return response;
-           // return Ok(response);
-            
+            return response;                     
         }
         /// <summary>
         /// 获取用户信息
