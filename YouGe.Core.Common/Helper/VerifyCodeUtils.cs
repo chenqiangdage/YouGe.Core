@@ -12,7 +12,7 @@ namespace YouGe.Core.Common.Helper
     {
         //验证码可以显示的字符集合
 
-        public static readonly string Vchar = "0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f,g,h,i,j,k,l,m,n,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,P,P,Q,R,S,T,U,V,W,X,Y,Z";
+        public static readonly string Vchar = "0123456789abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPPQRSTUVWXYZ";
 
         
 
@@ -98,6 +98,7 @@ namespace YouGe.Core.Common.Helper
             }
             ms = new MemoryStream();//生成内存流对象
             Img.Save(ms, ImageFormat.Jpeg);//将此图像以Png图像文件的格式保存到流中
+            ms.Seek(0,SeekOrigin.Begin);
             //回收资源
             g.Dispose();
             Img.Dispose();

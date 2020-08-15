@@ -605,18 +605,33 @@ namespace YouGe.Core.Commons
             return info;
         }
 
-        public static byte[] ToBytes(this object obj)
-        {
-            if (obj == null)
-                return null;
-            var bf = new BinaryFormatter();
-            using (var ms = new MemoryStream())
+        //public static byte[] ToBytes(this object obj)
+        //{
+        //    if (obj == null)
+        //        return null;
+        //    var bf = new BinaryFormatter();
+        //    using (var ms = new MemoryStream())
+        //    {
+        //        bf.Serialize(ms, obj);
+        //        return ms.ToArray();
+        //    }
+        //}
+        public static byte[] ToByteArray(this MemoryStream stream)
+        {          
+            byte[] bytes = new byte[stream.Length];
+            using (MemoryStream ms = new MemoryStream())
             {
-                bf.Serialize(ms, obj);
-                return ms.ToArray();
+                int read;
+                while ((read = stream.Read(bytes, 0, bytes.Length)) > 0)
+                {
+                    ms.Write(bytes, 0, read);
+                }
+                bytes = ms.ToArray();                
+                ms.Close();
             }
+            
+            return bytes;
         }
-
         public static object ToObject(this byte[] source)
         {
             using (var memStream = new MemoryStream())

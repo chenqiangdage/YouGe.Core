@@ -53,24 +53,27 @@ namespace YouGe.Core.ManagerApi.Controllers
         // 生成图片
         int w = 111, h = 36;
         MemoryStream stream = new MemoryStream();
-        VerifyCodeUtils.outputImage(w, h, out verifyCode, 4);
+        stream = VerifyCodeUtils.outputImage(w, h, out verifyCode, 4);
         YouGeRedisHelper.Set(verifyKey, verifyCode, YouGeSystemConst.CAPTCHA_EXPIRATION * 60);
             try
-        {
-            AjaxReponseBase ajax = AjaxReponseBase.Success();                 
-            ajax.Add("uuid", uuid);
-            ajax.Add("img", YouGeBase64.encode(stream.ToBytes()));
-            return ajax;
-        }
-        catch (Exception e)
-        {
-             Log4NetHelper.Error("获取验证码异常 "+ e.StackTrace);
-            return AjaxReponseBase.Error(e.Message);
-        }
-        finally
-        {
-            stream.Close();
-        }
+            {
+                AjaxReponseBase ajax = AjaxReponseBase.Success();                 
+                ajax.Add("uuid", uuid);
+                ajax.Add("verifyCode",verifyCode);
+                byte[] A = stream.ToByteArray();
+                stream.Close();
+                ajax.Add("img", YouGeBase64.encode(A));
+                return ajax;
+            }
+            catch (Exception e)
+            {
+                 Log4NetHelper.Error("获取验证码异常 "+ e.StackTrace);
+                return AjaxReponseBase.Error(e.Message);
+            }
+            finally
+            {
+                stream.Close();
+            }
     }
     }
 }

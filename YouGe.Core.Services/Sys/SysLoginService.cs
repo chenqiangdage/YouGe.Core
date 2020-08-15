@@ -41,7 +41,7 @@ namespace YouGe.Core.Services.Sys
                 //启动线程 记录日志
                  var ta = new Task(() =>
 
-                sysLoginRepository.recordLogininfor(username, YouGeSystemConst.FAIL, "验证码已失效", info)
+                sysLoginRepository.recordLogininfor(username, YouGeSystemConst.FAIL, "没有验证码", info)
                 );
                 ta.Start();
                  
