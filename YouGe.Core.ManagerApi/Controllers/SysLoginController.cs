@@ -52,6 +52,7 @@ namespace YouGe.Core.ManagerApi.Controllers
             AjaxReponseBase response =  AjaxReponseBase.Success();
             // 生成令牌
             RequestBasicInfo info = this.GetRequestInfo(httpContextAccessor);
+            
             string token = loginService.login(model.username, model.password, model.code,
                     model.uuid,info);                       
             response.Add(YouGeSystemConst.TOKEN, token);

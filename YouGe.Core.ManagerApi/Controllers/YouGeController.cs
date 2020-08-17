@@ -40,14 +40,15 @@ namespace YouGe.Core.ManagerApi.Controllers
                     ip = httpContextAccessor.HttpContext.Connection.LocalIpAddress.MapToIPv4().ToString();
                 }
             }
+            
             info.Ip = ip;
             info.RequestTime = DateTime.Now;
             info.RequestType = httpContextAccessor.HttpContext.Request.Method;
             info.RequestUrl = httpContextAccessor.HttpContext.Request.GetDisplayUrl();
-           // info.UserAgent  =  httpContextAccessor.HttpContext.Request.Headers["User-Agent"];
-            var  UserAgent= new UAParserUserAgent(httpContextAccessor.HttpContext);
-            info.Device = UserAgent.Device.ToString();
-            info.Os = UserAgent.OS.ToString();
+            string  UserAgent  =  httpContextAccessor.HttpContext.Request.Headers["User-Agent"];       
+            var RequestInfo = new ReqUAInfoCollector(UserAgent).Parse();
+            info.Device = RequestInfo.BrowserName + RequestInfo.BrowserVersion;
+            info.Os = RequestInfo.SystemName +RequestInfo.SystemVersion;
             return info;
         }
 
