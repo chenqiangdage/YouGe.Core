@@ -106,5 +106,12 @@ namespace YouGe.Core.DBEntitys.Sys
         public SysUser()
         {
         }
+
+        public bool isAdmin()
+        {
+            return (this.Id != 0 && this.Id == 1); 
+        }
+
+        
     }
 }
