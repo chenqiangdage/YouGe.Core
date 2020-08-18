@@ -6,7 +6,23 @@ namespace YouGe.Core.Commons
 {
     public static class StringExtensions
     {
-        public static object ParseTo(this string str, string type)
+        public static string TitleToUpper(this string str)
+          {
+              if(string.IsNullOrWhiteSpace(str))
+                  return string.Empty;
+  
+              char[] s = str.ToCharArray();
+              char c = s[0];
+  
+              if('a' <= c && c <= 'z')
+                 c = (char) (c & ~0x20);
+ 
+             s[0] = c;
+              return new string (s);
+         }
+
+
+    public static object ParseTo(this string str, string type)
         {
             switch (type)
             {

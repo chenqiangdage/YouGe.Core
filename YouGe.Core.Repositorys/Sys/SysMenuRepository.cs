@@ -56,5 +56,37 @@ namespace YouGe.Core.Repositorys.Sys
             }
             return permsSet;
         }
+
+        public List<SysMenu> selectMenuTreeAll()
+        {
+            
+            StringBuilder sql = new StringBuilder();
+            sql.Append(@"  select distinct m.menu_id, m.parent_id, m.menu_name, m.path, m.component, m.visible, m.status, ifnull(m.perms, '') as perms, m.is_frame, m.menu_type, m.icon, m.order_num, m.create_time
+     from sys_menu m where m.menu_type in ('M', 'C') and m.status = 0 order by m.parent_id, m.order_num ");
+           return  this.GetBySql(sql.ToString());
+        
+        }
+
+        public List<SysMenu> selectMenuTreeByUserId(long userId)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.Append(@" select distinct m.menu_id, m.parent_id, m.menu_name, m.path, m.component, m.visible, m.status, ifnull(m.perms, '') as perms, m.is_frame, m.menu_type, m.icon, m.order_num, m.create_time
+             from sys_menu m
+             left join sys_role_menu rm on m.menu_id = rm.menu_id
+             left join sys_user_role ur on rm.role_id = ur.role_id
+             left join sys_role ro on ur.role_id = ro.role_id
+             left join sys_user u on ur.user_id = u.user_id
+        where u.user_id = @userId and m.menu_type in ('M', 'C') and m.status = 0  AND ro.status = 0
+		order by m.parent_id, m.order_num");
+
+            MySqlParameter[] parametera = new MySqlParameter[1]{
+                new MySqlParameter("userId", MySqlDbType.Int64)
+            };
+            parametera[0].Value = userId;
+
+            var models = _dataContext.GetDatabase().SqlQuery<SysMenu>(sql.ToString(), parametera);
+
+            return models;
+        }
     }
 }

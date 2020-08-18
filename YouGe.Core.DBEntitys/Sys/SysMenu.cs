@@ -68,6 +68,7 @@ namespace YouGe.Core.DBEntitys.Sys
         /// </summary>
         [Column("icon")]
         public string Icon { get; set; }
+
        
         /// <summary>
         /// 创建者
@@ -91,8 +92,22 @@ namespace YouGe.Core.DBEntitys.Sys
         public DateTime? UpdateTime { get; set; }
         [Column("remark")]
         public string Remark { get; set; }
+
+
         public SysMenu()
         {
+        }
+
+        /** 子菜单 */
+        private List<SysMenu> children = new List<SysMenu>();
+        public List<SysMenu> getChildren()
+        {
+            return children;
+        }
+
+        public void setChildren(List<SysMenu> children)
+        {
+            this.children = children;
         }
     }
 }
