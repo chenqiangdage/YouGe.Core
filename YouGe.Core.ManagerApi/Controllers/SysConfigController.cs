@@ -19,6 +19,7 @@ using YouGe.Core.Commons.Helper;
 using System.IO;
 using YouGe.Core.Common.SystemConst;
 using YouGe.Core.Common.Security;
+using YouGe.Core.Common.YouGeAttribute;
 
 namespace YouGe.Core.ManagerApi.Controllers
 {
@@ -56,8 +57,8 @@ namespace YouGe.Core.ManagerApi.Controllers
         /// </summary>
         /// <param name=""></param>
         /// <param name=""></param>
-    @Log(title = "参数管理", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:config:export')")
+        [YouGeLog(title="参数管理",buinessType= BusinessType.EXPORT)]
         [HttpGet("export")]      
         public AjaxReponseBase export(SysConfig config)
         {
@@ -95,14 +96,15 @@ namespace YouGe.Core.ManagerApi.Controllers
 
    
     @PreAuthorize("@ss.hasPermi('system:config:add')")
-    @Log(title = "参数管理", businessType = BusinessType.INSERT)
-        /// <summary>
-        /// 新增参数配置
-        /// </summary>
-        /// <param name="RequestBody"></param>
-        /// <param name="config"></param>
-        /// <returns></returns>
-        [HttpPost]
+   
+    [YouGeLog(title= "参数管理", buinessType=BusinessType.INSERT)]
+    /// <summary>
+    /// 新增参数配置
+    /// </summary>
+    /// <param name="RequestBody"></param>
+    /// <param name="config"></param>
+    /// <returns></returns>
+    [HttpPost]
         public AjaxReponseBase add(SysConfig config)
         {
             if (YouGeUserConstants.NOT_UNIQUE.Equals(configService.checkConfigKeyUnique(config)))
@@ -115,14 +117,14 @@ namespace YouGe.Core.ManagerApi.Controllers
 
    
     @PreAuthorize("@ss.hasPermi('system:config:edit')")
-    @Log(title = "参数管理", businessType = BusinessType.UPDATE)
-        /// <summary>
-        /// 修改参数配置
-        /// </summary>
-        /// <param name="RequestBody"></param>
-        /// <param name="config"></param>
-        /// <returns></returns>
-        [HttpPut]
+    [YouGeLog(title="参数管理", buinessType=BusinessType.UPDATE)]
+    /// <summary>
+    /// 修改参数配置
+    /// </summary>
+    /// <param name="RequestBody"></param>
+    /// <param name="config"></param>
+    /// <returns></returns>
+    [HttpPut]
         public AjaxReponseBase edit(SysConfig config)
         {
             if (YouGeUserConstants.NOT_UNIQUE.Equals(configService.checkConfigKeyUnique(config)))
@@ -135,13 +137,13 @@ namespace YouGe.Core.ManagerApi.Controllers
 
     
     @PreAuthorize("@ss.hasPermi('system:config:remove')")
-    @Log(title = "参数管理", businessType = BusinessType.DELETE)
-        /// <summary>
-        /// 删除参数配置
-        /// </summary>
-        /// <param name="configIds"></param>
-        /// <returns></returns>
-        [HttpDelete("remove")]
+    [YouGeLog(title= "参数管理", buinessType=BusinessType.DELETE)]
+    /// <summary>
+    /// 删除参数配置
+    /// </summary>
+    /// <param name="configIds"></param>
+    /// <returns></returns>
+    [HttpDelete("remove")]
         public AjaxReponseBase remove(long[] configIds)
         {
             return toAjax(configService.deleteConfigByIds(configIds));
@@ -149,16 +151,16 @@ namespace YouGe.Core.ManagerApi.Controllers
 
     
     @PreAuthorize("@ss.hasPermi('system:config:remove')")
-    @Log(title = "参数管理", businessType = BusinessType.CLEAN)
-        /// <summary>
-        /// 清空缓存
-        /// </summary>
-        /// <returns></returns>
-        [HttpDelete("clearCache")]  
+   [YouGeLog(title= "参数管理", buinessType= BusinessType.CLEAN)]
+    /// <summary>
+    /// 清空缓存
+    /// </summary>
+    /// <returns></returns>
+    [HttpDelete("clearCache")]  
         public AjaxReponseBase clearCache()
         {
             configService.clearCache();
-            return AjaxReponseBase.Success();
+            return AjaxReponseBase.S    uccess();
         }
     }
 }
