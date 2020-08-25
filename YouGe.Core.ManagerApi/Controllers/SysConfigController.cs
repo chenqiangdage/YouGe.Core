@@ -20,6 +20,7 @@ using System.IO;
 using YouGe.Core.Common.SystemConst;
 using YouGe.Core.Common.Security;
 using YouGe.Core.Common.YouGeAttribute;
+using YouGe.Core.Models.Page;
 
 namespace YouGe.Core.ManagerApi.Controllers
 {
@@ -31,13 +32,15 @@ namespace YouGe.Core.ManagerApi.Controllers
     public class SysConfigController : YouGeController
     {
         private ISysConfigService configService;
-        public SysConfigController(ISysConfigService pconfigService)
+        protected readonly IHttpContextAccessor httpContextAccessor;
+        public SysConfigController(IHttpContextAccessor phttpContextAccessor, ISysConfigService pconfigService)
         {
+            this.httpContextAccessor = phttpContextAccessor;
             configService = pconfigService;
         }
 
          
-     @PreAuthorize("@ss.hasPermi('system:config:list')")
+    //@PreAuthorize("@ss.hasPermi('system:config:list')")
 
         /// <summary>
         /// 获取参数配置列表
@@ -45,39 +48,44 @@ namespace YouGe.Core.ManagerApi.Controllers
         /// <param name="config"></param>
         /// <returns></returns>
         [HttpGet("list")]
-        public TableDataInfo list(SysConfig config)
+        public TableDataInfo<SysConfig> list(SysConfig config)
         {
-            startPage();
+            startPage(httpContextAccessor);
+            long total = 1;
             List<SysConfig> list = configService.selectConfigList(config);
-            return getDataTable(list);
+            return getDataTable(list,total);
         }
 
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name=""></param>
         /// <param name=""></param>
-    @PreAuthorize("@ss.hasPermi('system:config:export')")
+        @PreAuthorize("@ss.hasPermi('system:config:export')")
         [YouGeLog(title="参数管理",buinessType= BusinessType.EXPORT)]
         [HttpGet("export")]      
         public AjaxReponseBase export(SysConfig config)
         {
             List<SysConfig> list = configService.selectConfigList(config);
             ExcelUtil<SysConfig> util = new ExcelUtil<SysConfig>(SysConfig.class);
+            return AjaxReponseBase.Success();
             return util.exportExcel(list, "参数数据");
         }
 
     
-    @PreAuthorize("@ss.hasPermi('system:config:query')")
+         @PreAuthorize("@ss.hasPermi('system:config:query')")
         /// <summary>
         /// 根据参数编号获取详细信息
         /// </summary>
         /// <param name="configId"></param>
         /// <returns></returns>
-        [HttpGet("getInfo")
-        public AjaxReponseBase getInfo( long configId)
+        [HttpGet("getInfo")]
+        public AjaxReponseBase getInfo(long configId)
         {
-            return AjaxReponseBase.Success(configService.selectConfigById(configId));
+          
+        configService.selectConfigById(configId);
+            return AjaxReponseBase.Success();
         }
 
     
@@ -95,7 +103,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         }
 
    
-    @PreAuthorize("@ss.hasPermi('system:config:add')")
+   // @PreAuthorize("@ss.hasPermi('system:config:add')")
    
     [YouGeLog(title= "参数管理", buinessType=BusinessType.INSERT)]
     /// <summary>
@@ -116,7 +124,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         }
 
    
-    @PreAuthorize("@ss.hasPermi('system:config:edit')")
+    //@PreAuthorize("@ss.hasPermi('system:config:edit')")
     [YouGeLog(title="参数管理", buinessType=BusinessType.UPDATE)]
     /// <summary>
     /// 修改参数配置
@@ -136,7 +144,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         }
 
     
-    @PreAuthorize("@ss.hasPermi('system:config:remove')")
+   // @PreAuthorize("@ss.hasPermi('system:config:remove')")
     [YouGeLog(title= "参数管理", buinessType=BusinessType.DELETE)]
     /// <summary>
     /// 删除参数配置
@@ -150,7 +158,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         }
 
     
-    @PreAuthorize("@ss.hasPermi('system:config:remove')")
+   // @PreAuthorize("@ss.hasPermi('system:config:remove')")
    [YouGeLog(title= "参数管理", buinessType= BusinessType.CLEAN)]
     /// <summary>
     /// 清空缓存

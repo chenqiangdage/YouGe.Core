@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace YouGe.Core.Commons
 {
     public static class StringExtensions
     {
+        /** 空字符串 */
+        private static readonly String NULLSTR = "";
+
+    /** 下划线 */
+    private static readonly char SEPARATOR = '_';
+
         public static string TitleToUpper(this string str)
           {
               if(string.IsNullOrWhiteSpace(str))
@@ -289,6 +296,63 @@ namespace YouGe.Core.Commons
         public static bool IsNullOrWhiteSpace(this string source)
         {
             return string.IsNullOrEmpty(source) || string.IsNullOrWhiteSpace(source);
+        }
+
+        public static string toUnderScoreCase(this string str)
+        {
+            if (str == null)
+            {
+                return null;
+            }
+            StringBuilder sb = new StringBuilder();
+            // 前置字符是否大写
+            bool preCharIsUpperCase = true;
+            // 当前字符是否大写
+            bool curreCharIsUpperCase = true;
+            // 下一字符是否大写
+            bool nexteCharIsUpperCase = true;
+            for (int i = 0; i < str.Length; i++)
+            {
+                char c = str[i];
+                if (i > 0)
+                {
+                    preCharIsUpperCase = isUpperCase(str[i - 1]);
+                }
+                else
+                {
+                    preCharIsUpperCase = false;
+                }
+
+                curreCharIsUpperCase = isUpperCase(c);
+
+                if (i < (str.Length - 1))
+                {
+                    nexteCharIsUpperCase = isUpperCase(str[i + 1]);
+                }
+
+                if (preCharIsUpperCase && curreCharIsUpperCase && !nexteCharIsUpperCase)
+                {
+                    sb.Append(SEPARATOR);
+                }
+                else if ((i != 0 && !preCharIsUpperCase) && curreCharIsUpperCase)
+                {
+                    sb.Append(SEPARATOR);
+                }
+                sb.Append(c.ToString().ToLower());
+            }
+
+            return sb.ToString();
+        }
+
+        private static bool isUpperCase(char c)
+        {
+            if (c > 'A' && c < 'Z'){
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

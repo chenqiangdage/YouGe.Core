@@ -30,7 +30,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         private readonly ISysPermissionService permissionService;
         private readonly ISysMenuService menuService;
         protected readonly IHttpContextAccessor httpContextAccessor;
-        public SysLoginController(IHttpContextAccessor httpContextAccessor,ILogger<SysLoginController> plogger, ISysTokenService pTokenService, ISysLoginService pLoginService,
+        public SysLoginController(IHttpContextAccessor phttpContextAccessor,ILogger<SysLoginController> plogger, ISysTokenService pTokenService, ISysLoginService pLoginService,
             ISysMenuService pMenuService, ISysPermissionService pPermissionService)
         {
             logger = plogger;
@@ -38,7 +38,7 @@ namespace YouGe.Core.ManagerApi.Controllers
             loginService = pLoginService;
             menuService = pMenuService;
             permissionService = pPermissionService;
-            this.httpContextAccessor = httpContextAccessor;
+            this.httpContextAccessor = phttpContextAccessor;
         }
         /// <summary>
         /// 登录方法

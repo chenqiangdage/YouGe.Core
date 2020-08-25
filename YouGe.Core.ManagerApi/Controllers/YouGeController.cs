@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using YouGe.Core.Common.Helper;
 using YouGe.Core.Models.Page;
+using YouGe.Core.Common.SystemConst;
 
 namespace YouGe.Core.ManagerApi.Controllers
 {
@@ -53,19 +54,37 @@ namespace YouGe.Core.ManagerApi.Controllers
             return info;
         }
 
-        /**
-    * 设置请求分页数据
-    */
-        protected void startPage()
+        /// <summary>
+        /// 设置请求分页数据
+        /// </summary>
+        protected void startPage(IHttpContextAccessor httpContextAccessor)
         {
+            //to do 这里用的是mybatis的 pagehelper插件
+            //net core 并没有这个插件，所以要做自己的分页
+            //这里就是拿请求中的分页参数
+
             PageDomain pageDomain = TableSupport.buildPageRequest();
-            int pageNum = pageDomain.getPageNum();
-            int pageSize = pageDomain.getPageSize();
-            if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize))
-            {
-                String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
-                PageHelper.startPage(pageNum, pageSize, orderBy);
-            }
+           // int? pageNum = pageDomain.PageNum;
+           // int? pageSize = pageDomain.PageSize;
+           // if ( pageNum.HasValue && pageSize.HasValue)
+           // {
+           //     string orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
+           //     PageHelper.startPage(pageNum, pageSize, orderBy);
+           // }
+        }
+        /// <summary>
+        /// 响应请求分页数据
+        /// </summary>
+       // @SuppressWarnings({ "rawtypes", "unchecked" })
+        protected TableDataInfo<T> getDataTable<T>(List<T> list,long total)
+        {
+            //to do 这个方式可能不好，全部移植完毕后优化这个分页的
+            TableDataInfo<T> rspData = new TableDataInfo<T>();
+            rspData.code = HttpStatusConst.SUCCESS;
+            rspData.msg = "查询成功";
+            rspData.rows =list;
+            rspData.total = total;
+            return rspData;
         }
 
     }
