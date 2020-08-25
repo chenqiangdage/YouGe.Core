@@ -14,6 +14,7 @@ using YouGe.Core.DBEntitys.Sys;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using YouGe.Core.Common.Helper;
+using YouGe.Core.Models.Page;
 
 namespace YouGe.Core.ManagerApi.Controllers
 {
@@ -52,6 +53,20 @@ namespace YouGe.Core.ManagerApi.Controllers
             return info;
         }
 
-        
+        /**
+    * 设置请求分页数据
+    */
+        protected void startPage()
+        {
+            PageDomain pageDomain = TableSupport.buildPageRequest();
+            int pageNum = pageDomain.getPageNum();
+            int pageSize = pageDomain.getPageSize();
+            if (StringUtils.isNotNull(pageNum) && StringUtils.isNotNull(pageSize))
+            {
+                String orderBy = SqlUtil.escapeOrderBySql(pageDomain.getOrderBy());
+                PageHelper.startPage(pageNum, pageSize, orderBy);
+            }
+        }
+
     }
 }
