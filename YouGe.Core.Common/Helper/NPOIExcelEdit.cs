@@ -149,7 +149,7 @@ namespace YouGe.Core.Common.Helper
         {
             ICellStyle style = wb.CreateCellStyle();
             IFont font = wb.CreateFont();
-            font.Color = color.Indexed;
+            //font.Color = color.ObjToInt();
             font.FontName = fontName;
             font.FontHeightInPoints = fontSize;
             style.Alignment = HorizontalAlignment;
