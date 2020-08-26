@@ -68,8 +68,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         public AjaxReponseBase export(SysConfig config)
         {
             List<SysConfig> list = configService.selectConfigList(config);
-            ExcelUtil<SysConfig> util = new ExcelUtil<SysConfig>(SysConfig.class);
-            return AjaxReponseBase.Success();
+            ExcelUtil<SysConfig> util = new ExcelUtil<SysConfig>(SysConfig.class);           
             return util.exportExcel(list, "参数数据");
         }
 
@@ -103,7 +102,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         }
 
    
-   // @PreAuthorize("@ss.hasPermi('system:config:add')")
+    @PreAuthorize("@ss.hasPermi('system:config:add')")
    
     [YouGeLog(title= "参数管理", buinessType=BusinessType.INSERT)]
     /// <summary>
@@ -124,7 +123,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         }
 
    
-    //@PreAuthorize("@ss.hasPermi('system:config:edit')")
+    @PreAuthorize("@ss.hasPermi('system:config:edit')")
     [YouGeLog(title="参数管理", buinessType=BusinessType.UPDATE)]
     /// <summary>
     /// 修改参数配置
@@ -144,7 +143,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         }
 
     
-   // @PreAuthorize("@ss.hasPermi('system:config:remove')")
+    @PreAuthorize("@ss.hasPermi('system:config:remove')")
     [YouGeLog(title= "参数管理", buinessType=BusinessType.DELETE)]
     /// <summary>
     /// 删除参数配置
@@ -158,7 +157,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         }
 
     
-   // @PreAuthorize("@ss.hasPermi('system:config:remove')")
+    @PreAuthorize("@ss.hasPermi('system:config:remove')")
    [YouGeLog(title= "参数管理", buinessType= BusinessType.CLEAN)]
     /// <summary>
     /// 清空缓存
