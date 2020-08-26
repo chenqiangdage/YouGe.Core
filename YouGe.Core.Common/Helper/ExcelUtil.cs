@@ -237,7 +237,7 @@ namespace YouGe.Core.Common.Helper
             return ds;
         }
 
-        public static byte[] ExportExcel<T>(List<T> entities, string sheetName, Dictionary<string, string> dicColumns, string title = null)
+        public static byte[] ExportExcelTobyte<T>(List<T> entities, string sheetName, Dictionary<string, string> dicColumns, string title = null)
         {
              byte[] buffer = null;
             MemoryStream ms = ExportExcelToStram(entities, sheetName, dicColumns, title);
@@ -245,6 +245,18 @@ namespace YouGe.Core.Common.Helper
             ms.Close();
             return buffer;
 
+        }
+        public static bool ExportExcelToFile<T>(List<T> entities, string sheetName, Dictionary<string, string> dicColumns,string fileName, string title = null)
+        {
+            byte[] buffer = null;
+            MemoryStream ms = ExportExcelToStram(entities, sheetName, dicColumns, title);
+
+            if (!File.Exists(filePath))
+            {
+                Log4NetHelper.Error("未找到文件 " + filePath);
+
+                return null;
+            }
         }
     }
 }
