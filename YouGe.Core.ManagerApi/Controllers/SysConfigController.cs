@@ -23,6 +23,7 @@ using YouGe.Core.Common.YouGeAttribute;
 using YouGe.Core.Models.Page;
 using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.AspNetCore.Hosting;
+using YouGe.Core.ManagerApi.Security;
 
 namespace YouGe.Core.ManagerApi.Controllers
 {
@@ -43,8 +44,8 @@ namespace YouGe.Core.ManagerApi.Controllers
             hostingEnvironment = _hostingEnvironment;
         }
 
-         
-    //@PreAuthorize("@ss.hasPermi('system:config:list')")
+        // to do  
+        //@PreAuthorize("@ss.hasPermi('system:config:list')")
 
         /// <summary>
         /// 获取参数配置列表
@@ -67,7 +68,10 @@ namespace YouGe.Core.ManagerApi.Controllers
         /// </summary>
         /// <param name="config"></param>
         /// <returns></returns>
-        @PreAuthorize("@ss.hasPermi('system:config:export')")
+
+        // to do  
+        //@PreAuthorize("@ss.hasPermi('system:config:export')")
+
         [YouGeLog(title = "参数管理", buinessType = BusinessType.EXPORT)]
         [HttpGet("export")]
         public AjaxReponseBase export(SysConfig config)
@@ -92,8 +96,8 @@ namespace YouGe.Core.ManagerApi.Controllers
              
         }
 
-    
-         @PreAuthorize("@ss.hasPermi('system:config:query')")
+        // to do  
+        // @PreAuthorize("@ss.hasPermi('system:config:query')")
         /// <summary>
         /// 根据参数编号获取详细信息
         /// </summary>
@@ -118,17 +122,17 @@ namespace YouGe.Core.ManagerApi.Controllers
             return AjaxReponseBase.Success(configService.selectConfigByKey(configKey));
         }
 
-   
-    @PreAuthorize("@ss.hasPermi('system:config:add')")
-   
-    [YouGeLog(title= "参数管理", buinessType=BusinessType.INSERT)]
-    /// <summary>
-    /// 新增参数配置
-    /// </summary>
-    /// <param name="RequestBody"></param>
-    /// <param name="config"></param>
-    /// <returns></returns>
-    [HttpPost]
+        // to do  
+        //@PreAuthorize("@ss.hasPermi('system:config:add')")
+
+        [YouGeLog(title= "参数管理", buinessType=BusinessType.INSERT)]
+        /// <summary>
+        /// 新增参数配置
+        /// </summary>
+        /// <param name="RequestBody"></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        [HttpPost]
         public AjaxReponseBase add(SysConfig config)
         {
             if (YouGeUserConstants.NOT_UNIQUE.Equals(configService.checkConfigKeyUnique(config)))
@@ -139,9 +143,9 @@ namespace YouGe.Core.ManagerApi.Controllers
             return toAjax(configService.insertConfig(config));
         }
 
-   
-    @PreAuthorize("@ss.hasPermi('system:config:edit')")
-    [YouGeLog(title="参数管理", buinessType=BusinessType.UPDATE)]
+        // to do  
+        //@PreAuthorize("@ss.hasPermi('system:config:edit')")
+        [YouGeLog(title="参数管理", buinessType=BusinessType.UPDATE)]
     /// <summary>
     /// 修改参数配置
     /// </summary>
@@ -159,9 +163,9 @@ namespace YouGe.Core.ManagerApi.Controllers
             return toAjax(configService.updateConfig(config));
         }
 
-    
-    @PreAuthorize("@ss.hasPermi('system:config:remove')")
-    [YouGeLog(title= "参数管理", buinessType=BusinessType.DELETE)]
+        // to do  
+        //@PreAuthorize("@ss.hasPermi('system:config:remove')")
+        [YouGeLog(title= "参数管理", buinessType=BusinessType.DELETE)]
     /// <summary>
     /// 删除参数配置
     /// </summary>
@@ -173,9 +177,9 @@ namespace YouGe.Core.ManagerApi.Controllers
             return toAjax(configService.deleteConfigByIds(configIds));
         }
 
-    
-    @PreAuthorize("@ss.hasPermi('system:config:remove')")
-   [YouGeLog(title= "参数管理", buinessType= BusinessType.CLEAN)]
+        // to do  
+        //@PreAuthorize("@ss.hasPermi('system:config:remove')")
+        [YouGeLog(title= "参数管理", buinessType= BusinessType.CLEAN)]
     /// <summary>
     /// 清空缓存
     /// </summary>

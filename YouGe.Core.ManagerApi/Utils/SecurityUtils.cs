@@ -1,5 +1,10 @@
 ﻿using System;
-namespace YouGe.Core.Common.Security
+using YouGe.Core.Common.Security;
+using YouGe.Core.Common.SystemConst;
+using YouGe.Core.Common.YouGeException;
+using YouGe.Core.Models.DTModel.Sys;
+
+namespace YouGe.Core.ManagerApi.Security
 {
     public class SecurityUtils
     {
@@ -10,7 +15,7 @@ namespace YouGe.Core.Common.Security
         /**
     * 获取用户账户
     **/
-        public static String getUsername()
+        public static string getUsername()
         {
             try
             {
@@ -18,7 +23,7 @@ namespace YouGe.Core.Common.Security
             }
             catch (Exception e)
             {
-                throw new CustomException("获取用户账户异常", HttpStatus.UNAUTHORIZED);
+                throw new CustomException("获取用户账户异常", HttpStatusConst.UNAUTHORIZED);
             }
         }
 
@@ -33,7 +38,7 @@ namespace YouGe.Core.Common.Security
             }
             catch (Exception e)
             {
-                throw new CustomException("获取用户信息异常", HttpStatus.UNAUTHORIZED);
+                throw new CustomException("获取用户信息异常", HttpStatusConst.UNAUTHORIZED);
             }
         }
 
@@ -51,10 +56,11 @@ namespace YouGe.Core.Common.Security
          * @param password 密码
          * @return 加密字符串
          */
-        public static String encryptPassword(String password)
+        public static string encryptPassword(string password)
         {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            return passwordEncoder.encode(password);
+
+            return EncryptPassWord.EncryptPwd(password, "abcd");
+             
         }
 
         /**
@@ -64,7 +70,7 @@ namespace YouGe.Core.Common.Security
          * @param encodedPassword 加密后字符
          * @return 结果
          */
-        public static boolean matchesPassword(String rawPassword, String encodedPassword)
+        public static bool matchesPassword(string rawPassword, string encodedPassword)
         {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             return passwordEncoder.matches(rawPassword, encodedPassword);

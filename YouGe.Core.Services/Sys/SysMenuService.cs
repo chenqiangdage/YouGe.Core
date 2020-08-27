@@ -135,10 +135,9 @@ namespace YouGe.Core.Services.Sys
         /// <returns></returns>
         public List<SysMenu> selectMenuTreeByUserId(long userId)
         {
-            List<SysMenu> menus = null;
-            if (SecurityUtils.isAdmin(userId))
-            {
-                 
+            List<SysMenu> menus = null;            
+            if (userId != 0 && 1L == userId)
+            {                 
                 menus = sysMenuRepository.selectMenuTreeAll();
             }
             else

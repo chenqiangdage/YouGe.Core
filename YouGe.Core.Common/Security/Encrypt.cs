@@ -4,7 +4,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace YouGe.Core.Common
+namespace YouGe.Core.Common.Security
 {
     public class Encrypt
     {
