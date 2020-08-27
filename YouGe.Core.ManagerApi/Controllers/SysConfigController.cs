@@ -21,6 +21,8 @@ using YouGe.Core.Common.SystemConst;
 using YouGe.Core.Common.Security;
 using YouGe.Core.Common.YouGeAttribute;
 using YouGe.Core.Models.Page;
+using Microsoft.Extensions.Hosting.Internal;
+using Microsoft.AspNetCore.Hosting;
 
 namespace YouGe.Core.ManagerApi.Controllers
 {
@@ -33,10 +35,12 @@ namespace YouGe.Core.ManagerApi.Controllers
     {
         private ISysConfigService configService;
         protected readonly IHttpContextAccessor httpContextAccessor;
-        public SysConfigController(IHttpContextAccessor phttpContextAccessor, ISysConfigService pconfigService)
+        private readonly IHostingEnvironment hostingEnvironment;
+        public SysConfigController(IHttpContextAccessor phttpContextAccessor, IHostingEnvironment _hostingEnvironment, ISysConfigService pconfigService)
         {
             this.httpContextAccessor = phttpContextAccessor;
             configService = pconfigService;
+            hostingEnvironment = _hostingEnvironment;
         }
 
          
@@ -56,20 +60,36 @@ namespace YouGe.Core.ManagerApi.Controllers
             return getDataTable(list,total);
         }
 
-        
+
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name=""></param>
-        /// <param name=""></param>
+        /// <param name="config"></param>
+        /// <returns></returns>
         @PreAuthorize("@ss.hasPermi('system:config:export')")
-        [YouGeLog(title="参数管理",buinessType= BusinessType.EXPORT)]
-        [HttpGet("export")]      
+        [YouGeLog(title = "参数管理", buinessType = BusinessType.EXPORT)]
+        [HttpGet("export")]
         public AjaxReponseBase export(SysConfig config)
         {
             List<SysConfig> list = configService.selectConfigList(config);
-            ExcelUtil<SysConfig> util = new ExcelUtil<SysConfig>(SysConfig.class);           
-            return util.exportExcel(list, "参数数据");
+                         
+            string rootpath = hostingEnvironment.WebRootPath + @"\ExcelFiles";
+            if (!Directory.Exists(rootpath))
+            {
+                Directory.CreateDirectory(rootpath);
+            }
+            string fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + config.ConfigKey + ".xlsx";
+            bool exportOK =  ExcelUtil.ExportExcelToFile<SysConfig>(list, "参数数据", null, rootpath, fileName);
+            if (exportOK)
+            {
+                return AjaxReponseBase.Success(fileName);
+            }
+            else
+            {
+                return AjaxReponseBase.Error("导出失败！");
+            }
+             
         }
 
     
@@ -81,19 +101,16 @@ namespace YouGe.Core.ManagerApi.Controllers
         /// <returns></returns>
         [HttpGet("getInfo")]
         public AjaxReponseBase getInfo(long configId)
-        {
-          
-        configService.selectConfigById(configId);
-            return AjaxReponseBase.Success();
+        {                     
+            return AjaxReponseBase.Success(configService.selectConfigById(configId));
         }
 
-    
-    
+
+
         /// <summary>
         /// 根据参数键名查询参数值
         /// </summary>
-        /// <param name="String"></param>
-        /// <param name=""></param>
+        /// <param name="configKey"></param>
         /// <returns></returns>
         [HttpGet("configKey")]
         public AjaxReponseBase getConfigKey(string configKey)
@@ -118,7 +135,7 @@ namespace YouGe.Core.ManagerApi.Controllers
             {
                 return AjaxReponseBase.Error("新增参数'" + config.ConfigName + "'失败，参数键名已存在");
             }
-            config.setCreateBy(SecurityUtils.getUsername());
+            config.CreateBy = (SecurityUtils.getUsername());
             return toAjax(configService.insertConfig(config));
         }
 
@@ -138,7 +155,7 @@ namespace YouGe.Core.ManagerApi.Controllers
             {
                 return AjaxReponseBase.Error("修改参数'" + config.ConfigName + "'失败，参数键名已存在");
             }
-            config.setUpdateBy(SecurityUtils.getUsername());
+            config.UpdateBy =(SecurityUtils.getUsername());
             return toAjax(configService.updateConfig(config));
         }
 
@@ -167,7 +184,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         public AjaxReponseBase clearCache()
         {
             configService.clearCache();
-            return AjaxReponseBase.S    uccess();
+            return AjaxReponseBase.Success();
         }
     }
 }

@@ -25,7 +25,8 @@ namespace YouGe.Core.ManagerApi.Controllers
     /// 
     /// </summary>
     public class YouGeController: ControllerBase
-    {               
+    {     
+        
         /// <summary>
         /// 获取远程访问用户的Ip地址
         /// </summary>
@@ -86,6 +87,15 @@ namespace YouGe.Core.ManagerApi.Controllers
             rspData.total = total;
             return rspData;
         }
-
+   
+        /// <summary>
+        /// 响应返回结果
+        /// </summary>
+        /// <param name="rows">影响行数</param>
+        /// <returns>操作结果</returns>
+        protected AjaxReponseBase toAjax(int rows)
+        {
+            return rows > 0 ? AjaxReponseBase.Success() : AjaxReponseBase.Error();
+        }
     }
 }

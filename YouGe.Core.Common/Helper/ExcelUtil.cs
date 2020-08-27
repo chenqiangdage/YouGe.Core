@@ -144,11 +144,20 @@ namespace YouGe.Core.Common.Helper
         /// <param name="title">标题</param>
         /// <returns></returns>
 
-        public static MemoryStream ExportExcelToStram<T>(List<T> entities, string sheetName,Dictionary<string, string> dicColumns, string title = null)
+        public static MemoryStream ExportExcelToStram<T>(List<T> entities, string sheetName,Dictionary<string, string> dicColumns=null, string title = null)
         {
             if (entities.Count <= 0)
             {
                 return null;
+            }
+            PropertyInfo[] properties = entities[0].GetType().GetProperties();
+            if (dicColumns == null) //如果没有，就用实体模型的字段名
+            {
+                dicColumns = new Dictionary<string, string>();
+                foreach (PropertyInfo p in properties)
+                {
+                    dicColumns.Add(p.Name, p.Name);
+                }
             }
             //HSSFWorkbook => xls
             //XSSFWorkbook => xlsx
@@ -157,7 +166,7 @@ namespace YouGe.Core.Common.Helper
             IRow cellsColumn = null;
             IRow cellsData = null;
             //获取实体属性名
-            PropertyInfo[] properties = entities[0].GetType().GetProperties();
+            
             int cellsIndex = 0;
             //标题
             if (!string.IsNullOrEmpty(title))
@@ -213,20 +222,7 @@ namespace YouGe.Core.Common.Helper
                     cellsData.CreateCell(index).SetCellValue(entityValues[i].ToString());
                 }
                 cellsIndex++;
-            }
-
-            // byte[] buffer = null;
-            // MemoryStream ds = new MemoryStream();
-            // using (MemoryStream ms = new MemoryStream())
-            // {
-            //     workbook.Write(ms);
-            //     buffer = ms.GetBuffer();
-            //    ms.CopyTo(ds);
-            //     ms.Close();
-
-            //}
-
-            // return buffer;
+            }                    
              MemoryStream ds = new MemoryStream();
              using (MemoryStream ms = new MemoryStream())
              {
@@ -236,28 +232,55 @@ namespace YouGe.Core.Common.Helper
             }
             return ds;
         }
-
+        /// <summary>
+        /// 导出成excel byte字节流
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entities"></param>
+        /// <param name="sheetName"></param>
+        /// <param name="dicColumns"></param>
+        /// <param name="title"></param>
+        /// <returns></returns>
         public static byte[] ExportExcelTobyte<T>(List<T> entities, string sheetName, Dictionary<string, string> dicColumns, string title = null)
-        {
-             byte[] buffer = null;
+        {              
             MemoryStream ms = ExportExcelToStram(entities, sheetName, dicColumns, title);
-            buffer = ms.GetBuffer();
+            byte[] buffer = ms.GetBuffer();
             ms.Close();
             return buffer;
-
         }
-        public static bool ExportExcelToFile<T>(List<T> entities, string sheetName, Dictionary<string, string> dicColumns,string fileName, string title = null)
+        /// <summary>
+        /// 导出excel 到指定的文件
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entities"></param>
+        /// <param name="sheetName"></param>
+        /// <param name="dicColumns"></param>
+        /// <param name="fileName">指定的文件</param>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        public static bool ExportExcelToFile<T>(List<T> entities, string sheetName, Dictionary<string, string> dicColumns,string filePath,string fileName, string title = null)
         {
-            byte[] buffer = null;
+           
             MemoryStream ms = ExportExcelToStram(entities, sheetName, dicColumns, title);
-
-            if (!File.Exists(filePath))
+            using (FileStream file = new FileStream(fileName, FileMode.OpenOrCreate, System.IO.FileAccess.Write))
             {
-                Log4NetHelper.Error("未找到文件 " + filePath);
-
-                return null;
-            }
+                bool isOk = false;
+                if (ms.Length == 0) return isOk;
+                byte[] bytes = new byte[ms.Length];               
+                int  counts = ms.Read(bytes, 0, (int)ms.Length);                
+                file.Write(bytes, 0, bytes.Length);               
+                file.Close();
+                ms.Close();
+                if(counts>0)
+                {
+                    return true;
+                }
+                return false;
+            }                         
+           
         }
+
+        
     }
 }
 

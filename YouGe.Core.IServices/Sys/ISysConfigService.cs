@@ -49,7 +49,7 @@ namespace YouGe.Core.Interface.IServices.Sys
         /// </summary>
         /// <param name="configIds">需要删除的参数ID</param>
         /// <returns></returns>
-        public int deleteConfigByIds(Long[] configIds);
+        public int deleteConfigByIds(long[] configIds);
 
         /// <summary>
         /// 清空缓存数据
