@@ -55,6 +55,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         [HttpGet("list")]
         public TableDataInfo<SysConfig> list(SysConfig config)
         {
+            
             startPage(httpContextAccessor);
             long total = 1;
             List<SysConfig> list = configService.selectConfigList(config);

@@ -63,8 +63,8 @@ namespace YouGe.Core.ManagerApi.Controllers
             //to do 这里用的是mybatis的 pagehelper插件
             //net core 并没有这个插件，所以要做自己的分页
             //这里就是拿请求中的分页参数
-
-            PageDomain pageDomain = TableSupport.buildPageRequest();
+            HttpRequest request = httpContextAccessor.HttpContext.Request;
+            PageDomain pageDomain = TableSupport.buildPageRequest(request);
            // int? pageNum = pageDomain.PageNum;
            // int? pageSize = pageDomain.PageSize;
            // if ( pageNum.HasValue && pageSize.HasValue)

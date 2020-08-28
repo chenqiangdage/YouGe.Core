@@ -59,7 +59,7 @@ namespace YouGe.Core.ManagerApi.Security
         public static string encryptPassword(string password)
         {
 
-            return EncryptPassWord.EncryptPwd(password, "abcd");
+            return EncryptPassWord.EncryptPwd(password, "chenqiang");
              
         }
 
@@ -72,8 +72,8 @@ namespace YouGe.Core.ManagerApi.Security
          */
         public static bool matchesPassword(string rawPassword, string encodedPassword)
         {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            return passwordEncoder.matches(rawPassword, encodedPassword);
+           string realPassword =  EncryptPassWord.EncryptPwd(rawPassword, "chenqiang");
+            return realPassword == encodedPassword;
         }
 
 
