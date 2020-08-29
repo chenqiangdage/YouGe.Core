@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using YouGe.Core.Common.Security;
 using YouGe.Core.Common.SystemConst;
 using YouGe.Core.Common.YouGeException;
+using YouGe.Core.Commons;
+using YouGe.Core.Interface.IServices.Sys;
 using YouGe.Core.Models.DTModel.Sys;
 
 namespace YouGe.Core.ManagerApi.Security
@@ -15,11 +18,11 @@ namespace YouGe.Core.ManagerApi.Security
         /**
     * 获取用户账户
     **/
-        public static string getUsername()
+        public static string getUsername(ISysTokenService tokenService,HttpRequest request)
         {
             try
             {
-                return getLoginUser().getUsername();
+                return getLoginUser(tokenService, request).getUsername();
             }
             catch (Exception e)
             {
@@ -30,11 +33,12 @@ namespace YouGe.Core.ManagerApi.Security
         /**
          * 获取用户
          **/
-        public static LoginUser getLoginUser()
+        public static LoginUser getLoginUser(ISysTokenService tokenService, HttpRequest request)
         {
             try
             {
-                return (LoginUser)getAuthentication().getPrincipal();
+                return tokenService.getLoginUser(request);
+                //return (LoginUser)getAuthentication().getPrincipal();
             }
             catch (Exception e)
             {
@@ -45,10 +49,12 @@ namespace YouGe.Core.ManagerApi.Security
         /**
          * 获取Authentication
          */
-        public static Authentication getAuthentication()
-        {
-            return SecurityContextHolder.getContext().getAuthentication();
-        }
+        //public static Authentication getAuthentication()
+        //{
+        //    return SecurityContextHolder.getContext().getAuthentication();
+        //}
+
+ 
 
         /**
          * 生成BCryptPasswordEncoder密码

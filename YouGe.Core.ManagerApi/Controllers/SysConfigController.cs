@@ -37,10 +37,12 @@ namespace YouGe.Core.ManagerApi.Controllers
         private ISysConfigService configService;
         protected readonly IHttpContextAccessor httpContextAccessor;
         private readonly IHostingEnvironment hostingEnvironment;
-        public SysConfigController(IHttpContextAccessor phttpContextAccessor, IHostingEnvironment _hostingEnvironment, ISysConfigService pconfigService)
+        private readonly ISysTokenService tokenService;
+        public SysConfigController(IHttpContextAccessor phttpContextAccessor, IHostingEnvironment _hostingEnvironment, ISysTokenService pTokenService, ISysConfigService pconfigService)
         {
             this.httpContextAccessor = phttpContextAccessor;
             configService = pconfigService;
+            tokenService = pTokenService;
             hostingEnvironment = _hostingEnvironment;
         }
 
@@ -55,7 +57,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         [HttpGet("list")]
         public TableDataInfo<SysConfig> list(SysConfig config)
         {
-            
+           
             startPage(httpContextAccessor);
             long total = 1;
             List<SysConfig> list = configService.selectConfigList(config);
@@ -140,27 +142,26 @@ namespace YouGe.Core.ManagerApi.Controllers
             {
                 return AjaxReponseBase.Error("新增参数'" + config.ConfigName + "'失败，参数键名已存在");
             }
-            config.CreateBy = (SecurityUtils.getUsername());
+            config.CreateBy = (SecurityUtils.getUsername(tokenService, httpContextAccessor.HttpContext.Request));
             return toAjax(configService.insertConfig(config));
         }
 
         // to do  
-        //@PreAuthorize("@ss.hasPermi('system:config:edit')")
-        [YouGeLog(title="参数管理", buinessType=BusinessType.UPDATE)]
-    /// <summary>
-    /// 修改参数配置
-    /// </summary>
-    /// <param name="RequestBody"></param>
-    /// <param name="config"></param>
-    /// <returns></returns>
-    [HttpPut]
+        //@PreAuthorize("@ss.hasPermi('system:config:edit')")         
+        /// <summary>
+        /// 修改参数配置
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [YouGeLog(title = "参数管理", buinessType = BusinessType.UPDATE)]
         public AjaxReponseBase edit(SysConfig config)
         {
             if (YouGeUserConstants.NOT_UNIQUE.Equals(configService.checkConfigKeyUnique(config)))
             {
                 return AjaxReponseBase.Error("修改参数'" + config.ConfigName + "'失败，参数键名已存在");
-            }
-            config.UpdateBy =(SecurityUtils.getUsername());
+            }         
+            config.UpdateBy =(SecurityUtils.getUsername(tokenService, httpContextAccessor.HttpContext.Request));
             return toAjax(configService.updateConfig(config));
         }
 
