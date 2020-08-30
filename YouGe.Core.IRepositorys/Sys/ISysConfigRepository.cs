@@ -9,7 +9,7 @@ using YouGe.Core.Models.System;
 
 namespace YouGe.Core.Interface.IRepositorys.Sys
 {
-    public interface ISysConfigRepository : IRepository<SysLoginInfor, int>
+    public interface ISysConfigRepository : IRepository<SysConfig, int>
     {
     }
 }

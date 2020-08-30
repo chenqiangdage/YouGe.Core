@@ -58,6 +58,10 @@ namespace YouGe.Core.DBEntitys.Sys
         /// </summary>
         [Column("remark")]
         public string Remark { get; set; }
+        [NotMapped]
+        public DateTime? beginTime { get; set; }
+        [NotMapped]
+        public DateTime? endTime { get; set; }
 
         public SysConfig()
         {
