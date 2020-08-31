@@ -147,8 +147,7 @@ namespace YouGe.Core.Repositorys.Sys
         {
             long configId = config.Id;
 
-            SysConfig info = configMapper.checkConfigKeyUnique(config.getConfigKey());
-
+            SysConfig info = this.GetSingleOrDefault(u => u.ConfigKey == config.ConfigKey);            
             if (info!=null && info.Id != configId)
             {
                 return YouGeUserConstants.NOT_UNIQUE;

@@ -325,7 +325,7 @@ namespace YouGe.Core.Commons
         }
     }
 }
-    }
+    
 
     public class Filter
     {
@@ -333,4 +333,4 @@ namespace YouGe.Core.Commons
         public string Value { get; set; }
         public string Contrast { get; set; }
     }
-}
+ 

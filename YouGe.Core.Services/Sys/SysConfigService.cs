@@ -31,46 +31,75 @@ namespace YouGe.Core.Services.Sys
             sysUserRepository = _sysUserRepository;
             sysConfigRepository = pSysConfigRepository;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configId"></param>
+        /// <returns></returns>
         public SysConfig selectConfigById(long configId)
         {
-            
-            throw new NotImplementedException();
+           return  sysConfigRepository.selectConfigById(configId);            
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configKey"></param>
+        /// <returns></returns>
         public string selectConfigByKey(string configKey)
         {
-            throw new NotImplementedException();
+            return sysConfigRepository.selectConfigByKey(configKey);            
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
         public List<SysConfig> selectConfigList(SysConfig config)
         {
-            throw new NotImplementedException();
+           return  sysConfigRepository.selectConfigList(config);            
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
         public int insertConfig(SysConfig config)
         {
-            throw new NotImplementedException();
+            return sysConfigRepository.insertConfig(config);            
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
         public int updateConfig(SysConfig config)
         {
-            throw new NotImplementedException();
+            return sysConfigRepository.updateConfig(config);            
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configIds"></param>
+        /// <returns></returns>
         public int deleteConfigByIds(long[] configIds)
         {
-            throw new NotImplementedException();
+            return sysConfigRepository.deleteConfigByIds(configIds);            
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public void clearCache()
         {
-            throw new NotImplementedException();
+            sysConfigRepository.clearCache();            
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
         public string checkConfigKeyUnique(SysConfig config)
         {
-            throw new NotImplementedException();
+            return sysConfigRepository.checkConfigKeyUnique(config);           
         }
     }
 }

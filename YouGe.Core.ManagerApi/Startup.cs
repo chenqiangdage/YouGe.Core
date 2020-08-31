@@ -25,6 +25,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Filters;
 using YouGe.Core.Common.Helper;
 using YouGe.Core.Commons;
@@ -50,7 +52,17 @@ namespace YouGe.Core.ManagerApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                //修改属性名称的序列化方式，首字母小写
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+                //修改时间的序列化方式
+                options.SerializerSettings.Converters.Add(new IsoDateTimeConverter() { DateTimeFormat = "yyyy-MM-dd HH:mm:ss" });
+                options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore; //设置忽略值
+
+            }
+            );
             services.BuildAutofacServiceProvider();
             #region swagger ui
             //使用自身的
