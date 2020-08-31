@@ -24,10 +24,28 @@ namespace YouGe.Core.Repositorys.Sys
         {
             option = (YouGeDbContextOption)DbContext.Option;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dept"></param>
+        /// <returns></returns>
         public List<SysDept> selectDeptList(SysDept dept)
         {
-            throw new NotImplementedException();
+            Expression<Func<SysDept, bool>> express = i => 1 == 1;
+            if (!string.IsNullOrEmpty(dept.ParentId))
+            {
+                express = express.AndAlso(e => e.ParentId ==dept.ParentId);
+            }
+            if (!string.IsNullOrEmpty(dept.DeptName))
+            {
+                express = express.AndAlso(e => e.DeptName.Contains( dept.ParentId));
+            }
+            if (dept.Status.ToString() != "")
+            {
+                express = express.AndAlso(e => e.Status == dept.Status);
+            }
+            //to do 如何排序？
+            return (List<SysDept>)this.Get(express);
         }
 
         public List<SysDept> buildDeptTree(List<SysDept> depts)

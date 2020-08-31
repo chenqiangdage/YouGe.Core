@@ -18,78 +18,122 @@ namespace YouGe.Core.Services.Sys
 {
     public class SysDeptService : ISysDeptService
     {
-        private ISysTokenService tokenService;
-        private ISysPermissionService permissionservice;
-        private ISysLoginRepository sysLoginRepository;
-        private ISysConfigRepository sysConfigRepository;
-        public ISysUserRepository sysUserRepository;
-        public SysDeptService(ISysConfigRepository pSysConfigRepository, ISysTokenService pTokenService, ISysPermissionService pPermissionservice, ISysLoginRepository pSysLoginRepository, ISysUserRepository _sysUserRepository)
+        
+        private ISysDeptRepository sysDeptRepository;
+       
+        public SysDeptService(ISysDeptRepository psysDeptRepository)
         {
-            tokenService = pTokenService;
-            permissionservice = pPermissionservice;
-            sysLoginRepository = pSysLoginRepository;
-            sysUserRepository = _sysUserRepository;
-            sysConfigRepository = pSysConfigRepository;
-        }
 
+            sysDeptRepository = psysDeptRepository;
+            
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dept"></param>
+        /// <returns></returns>
         public List<SysDept> selectDeptList(SysDept dept)
         {
-            throw new NotImplementedException();
+            return sysDeptRepository.selectDeptList(dept);         
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="depts"></param>
+        /// <returns></returns>
         public List<SysDept> buildDeptTree(List<SysDept> depts)
         {
-            throw new NotImplementedException();
+            return sysDeptRepository.buildDeptTree(depts);    
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="depts"></param>
+        /// <returns></returns>
         public List<TreeSelect> buildDeptTreeSelect(List<SysDept> depts)
         {
-            throw new NotImplementedException();
+            return sysDeptRepository.buildDeptTreeSelect(depts);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
         public List<int> selectDeptListByRoleId(long roleId)
         {
-            throw new NotImplementedException();
+            return sysDeptRepository.selectDeptListByRoleId(roleId);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deptId"></param>
+        /// <returns></returns>
         public SysDept selectDeptById(long deptId)
         {
-            throw new NotImplementedException();
+            return sysDeptRepository.selectDeptById(deptId); 
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deptId"></param>
+        /// <returns></returns>
         public int selectNormalChildrenDeptById(long deptId)
         {
-            throw new NotImplementedException();
+            return sysDeptRepository.selectNormalChildrenDeptById(deptId);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deptId"></param>
+        /// <returns></returns>
         public bool hasChildByDeptId(long deptId)
         {
-            throw new NotImplementedException();
+            return sysDeptRepository.hasChildByDeptId(deptId);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deptId"></param>
+        /// <returns></returns>
         public bool checkDeptExistUser(long deptId)
         {
-            throw new NotImplementedException();
+            return sysDeptRepository.checkDeptExistUser(deptId);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dept"></param>
+        /// <returns></returns>
         public string checkDeptNameUnique(SysDept dept)
         {
-            throw new NotImplementedException();
+            return sysDeptRepository.checkDeptNameUnique(dept);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dept"></param>
+        /// <returns></returns>
         public int insertDept(SysDept dept)
         {
-            throw new NotImplementedException();
+            return sysDeptRepository.insertDept(dept);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dept"></param>
+        /// <returns></returns>
         public int updateDept(SysDept dept)
         {
-            throw new NotImplementedException();
+            return sysDeptRepository.updateDept(dept);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="deptId"></param>
+        /// <returns></returns>
         public int deleteDeptById(long deptId)
         {
-            throw new NotImplementedException();
+            return sysDeptRepository.deleteDeptById(deptId);
         }
     }
 }

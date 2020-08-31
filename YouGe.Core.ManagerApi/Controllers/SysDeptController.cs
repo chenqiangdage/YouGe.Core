@@ -50,27 +50,32 @@ namespace YouGe.Core.ManagerApi.Controllers
             tokenService = pTokenService;
             hostingEnvironment = _hostingEnvironment;
         }
-        /**
-    * 获取部门列表
-    */
+ 
         //  @PreAuthorize("@ss.hasPermi('system:dept:list')")
+        /// <summary>
+        /// 获取部门列表
+        /// </summary>
+        /// <param name="dept"></param>
+        /// <returns></returns>
         [HttpGet("list")]
-    public AjaxReponseBase list([FromQuery] SysDept dept)
+        public AjaxReponseBase list([FromQuery] SysDept dept)
         {
             List<SysDept> depts = deptService.selectDeptList(dept);
             return AjaxReponseBase.Success(depts);
         }
 
-        /**
-         * 查询部门列表（排除节点）
-         */
-        //@PreAuthorize("@ss.hasPermi('system:dept:list')")     
-        [HttpGet]
-        [Route("/list/exclude/{deptId}")]
-        public AjaxReponseBase excludeChild( long deptId)
-    {
-        List<SysDept> depts = deptService.selectDeptList(new SysDept());
 
+        //@PreAuthorize("@ss.hasPermi('system:dept:list')")
+        /// <summary>
+        /// 查询部门列表（排除节点）
+        /// </summary>
+        /// <param name="deptId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("/list/exclude/{deptId}")]       
+        public AjaxReponseBase excludeChild( long deptId)
+        {
+            List<SysDept> depts = deptService.selectDeptList(new SysDept());
             var it = depts.GetEnumerator();
             while (it.MoveNext())
             {
@@ -81,103 +86,112 @@ namespace YouGe.Core.ManagerApi.Controllers
                 }
             }                         
         return AjaxReponseBase.Success(depts);
-    }
+        }
 
-        /**
-         * 根据部门编号获取详细信息
-         */
+        /// <summary>
+        /// 根据部门编号获取详细信息
+        /// </summary>
+        /// <param name="deptId"></param>
+        /// <returns></returns>
         //@PreAuthorize("@ss.hasPermi('system:dept:query')")
         [Route("/system/dept/{deptId}")]
         public AjaxReponseBase getInfo(long deptId)
-{
-    return AjaxReponseBase.Success(deptService.selectDeptById(deptId));
-}
+        {
+            return AjaxReponseBase.Success(deptService.selectDeptById(deptId));
+        }
 
-/**
- * 获取部门下拉树列表
- */
+        /// <summary>
+        /// 获取部门下拉树列表
+        /// </summary>
+        /// <param name="dept"></param>
+        /// <returns></returns>
+        [HttpGet("/treeselect")]
+        public AjaxReponseBase treeselect(SysDept dept)
+        {
+            List<SysDept> depts = deptService.selectDeptList(dept);
+            return AjaxReponseBase.Success(deptService.buildDeptTreeSelect(depts));
+        }
 
-            [HttpGet("/treeselect")]
-    public AjaxReponseBase treeselect(SysDept dept)
-{
-    List<SysDept> depts = deptService.selectDeptList(dept);
-    return AjaxReponseBase.Success(deptService.buildDeptTreeSelect(depts));
-}
-
-/**
- * 加载对应角色部门列表树
- */
- 
-               [HttpGet("/roleDeptTreeselect")]
+        /// <summary>
+        /// 加载对应角色部门列表树
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        [HttpGet("/roleDeptTreeselect")]
         public AjaxReponseBase roleDeptTreeselect(long roleId)
-    {
+        {
         List<SysDept> depts = deptService.selectDeptList(new SysDept());
-AjaxReponseBase ajax = AjaxReponseBase.Success();
-ajax.Add("checkedKeys", deptService.selectDeptListByRoleId(roleId));
+        AjaxReponseBase ajax = AjaxReponseBase.Success();
+        ajax.Add("checkedKeys", deptService.selectDeptListByRoleId(roleId));
         ajax.Add("depts", deptService.buildDeptTreeSelect(depts));
         return ajax;
-    }
+        }
 
-    /**
-     * 新增部门
-     */
-    //@PreAuthorize("@ss.hasPermi('system:dept:add')")
- 
-     [YouGeLog(title = "部门管理", buinessType = BusinessType.INSERT)]
+        /// <summary>
+        /// 新增部门
+        /// </summary>
+        /// <param name="dept"></param>
+        /// <returns></returns>
+        //@PreAuthorize("@ss.hasPermi('system:dept:add')")
+
+        [YouGeLog(title = "部门管理", buinessType = BusinessType.INSERT)]
         [HttpPost()]
-    public AjaxReponseBase add([FromBody]SysDept dept)
-{
-    if (YouGeUserConstants.NOT_UNIQUE.Equals(deptService.checkDeptNameUnique(dept)))
-    {
-        return AjaxReponseBase.Error("新增部门'" + dept.DeptName + "'失败，部门名称已存在");
-    }
-    dept.CreateBy =(SecurityUtils.getUsername(tokenService, httpContextAccessor.HttpContext.Request));
-    return toAjax(deptService.insertDept(dept));
-}
+        public AjaxReponseBase add([FromBody]SysDept dept)
+        {
+            if (YouGeUserConstants.NOT_UNIQUE.Equals(deptService.checkDeptNameUnique(dept)))
+            {
+                return AjaxReponseBase.Error("新增部门'" + dept.DeptName + "'失败，部门名称已存在");
+            }
+            dept.CreateBy =(SecurityUtils.getUsername(tokenService, httpContextAccessor.HttpContext.Request));
+            return toAjax(deptService.insertDept(dept));
+        }
 
-/**
- * 修改部门
- */
-//@PreAuthorize("@ss.hasPermi('system:dept:edit')")
-             [YouGeLog(title = "部门管理", buinessType = BusinessType.UPDATE)]
-       
-  [HttpPut()]
-    public AjaxReponseBase edit([FromBody] SysDept dept)
-{
-    if (YouGeUserConstants.NOT_UNIQUE.Equals(deptService.checkDeptNameUnique(dept)))
-    {
-        return AjaxReponseBase.Error("修改部门'" + dept.DeptName + "'失败，部门名称已存在");
-    }
-    else if (dept.ParentId.Equals(dept.Id))
-    {
-        return AjaxReponseBase.Error("修改部门'" + dept.DeptName + "'失败，上级部门不能是自己");
-    }
-    else if ( YouGeUserConstants.DEPT_DISABLE.Equals( dept.Status)
-            && deptService.selectNormalChildrenDeptById(dept.Id) > 0)
-    {
-        return AjaxReponseBase.Error("该部门包含未停用的子部门！");
-    }
-    dept.UpdateBy=(SecurityUtils.getUsername(tokenService, httpContextAccessor.HttpContext.Request));
-    return toAjax(deptService.updateDept(dept));
-}
+        /// <summary>
+        /// 修改部门
+        /// </summary>
+        /// <param name="dept"></param>
+        /// <returns></returns>
+        //@PreAuthorize("@ss.hasPermi('system:dept:edit')")
+        [YouGeLog(title = "部门管理", buinessType = BusinessType.UPDATE)]
+        [HttpPut()]
+        public AjaxReponseBase edit([FromBody] SysDept dept)
+        {
+            if (YouGeUserConstants.NOT_UNIQUE.Equals(deptService.checkDeptNameUnique(dept)))
+            {
+                return AjaxReponseBase.Error("修改部门'" + dept.DeptName + "'失败，部门名称已存在");
+            }
+            else if (dept.ParentId.Equals(dept.Id))
+            {
+                return AjaxReponseBase.Error("修改部门'" + dept.DeptName + "'失败，上级部门不能是自己");
+            }
+            else if ( YouGeUserConstants.DEPT_DISABLE.Equals( dept.Status)
+                    && deptService.selectNormalChildrenDeptById(dept.Id) > 0)
+            {
+                return AjaxReponseBase.Error("该部门包含未停用的子部门！");
+            }
+            dept.UpdateBy=(SecurityUtils.getUsername(tokenService, httpContextAccessor.HttpContext.Request));
+            return toAjax(deptService.updateDept(dept));
+        }
 
-        /**
-         * 删除部门
-         */
+        /// <summary>
+        /// 删除部门
+        /// </summary>
+        /// <param name="deptId"></param>
+        /// <returns></returns>
         //@PreAuthorize("@ss.hasPermi('system:dept:remove')")
         [YouGeLog(title = "部门管理", buinessType = BusinessType.DELETE)]
         [HttpDelete("/system/dept/{deptId}")]         
-    public AjaxReponseBase remove(long deptId)
-{
-    if (deptService.hasChildByDeptId(deptId))
-    {
-        return AjaxReponseBase.Error("存在下级部门,不允许删除");
-    }
-    if (deptService.checkDeptExistUser(deptId))
-    {
-        return AjaxReponseBase.Error("部门存在用户,不允许删除");
-    }
-    return toAjax(deptService.deleteDeptById(deptId));
-}
+        public AjaxReponseBase remove(long deptId)
+        {
+            if (deptService.hasChildByDeptId(deptId))
+            {
+                return AjaxReponseBase.Error("存在下级部门,不允许删除");
+            }
+            if (deptService.checkDeptExistUser(deptId))
+            {
+                return AjaxReponseBase.Error("部门存在用户,不允许删除");
+            }
+            return toAjax(deptService.deleteDeptById(deptId));
+        }
     }
 }
