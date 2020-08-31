@@ -42,7 +42,7 @@ namespace YouGe.Core.Services.Sys
             throw new NotImplementedException();
         }
 
-        public List<Models.DTModel.Sys.TreeSelect> buildDeptTreeSelect(List<SysDept> depts)
+        public List<TreeSelect> buildDeptTreeSelect(List<SysDept> depts)
         {
             throw new NotImplementedException();
         }

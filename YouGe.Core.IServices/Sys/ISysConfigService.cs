@@ -21,7 +21,7 @@ namespace YouGe.Core.Interface.IServices.Sys
         /// </summary>
         /// <param name="configKey">参数键名</param>
         /// <returns>参数键值</returns>
-        public string selectConfigByKey(string configKey);
+        public SysConfig selectConfigByKey(string configKey);
 
         /// <summary>
         /// 查询参数配置列表

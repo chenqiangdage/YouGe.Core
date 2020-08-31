@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using YouGe.Core.DBEntitys.Sys;
 using YouGe.Core.Models.DTModel.Sys;
+using YouGe.Core.Models.System;
 
 namespace YouGe.Core.Interface.IServices.Sys
 {

@@ -55,7 +55,7 @@ namespace YouGe.Core.ManagerApi.Controllers
         /// <param name="config"></param>
         /// <returns></returns>
         [HttpGet("list")]
-        public TableDataInfo<SysConfig> list(SysConfig config)
+        public TableDataInfo<SysConfig> list([FromQuery] SysConfig config)
         {
            
             startPage(httpContextAccessor);

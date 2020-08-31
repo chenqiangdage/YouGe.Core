@@ -45,7 +45,7 @@ namespace YouGe.Core.Services.Sys
         /// </summary>
         /// <param name="configKey"></param>
         /// <returns></returns>
-        public string selectConfigByKey(string configKey)
+        public SysConfig selectConfigByKey(string configKey)
         {
             return sysConfigRepository.selectConfigByKey(configKey);            
         }

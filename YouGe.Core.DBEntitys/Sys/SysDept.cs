@@ -78,7 +78,17 @@ namespace YouGe.Core.DBEntitys.Sys
             /// </summary>
             [Column("update_time")]
             public DateTime? UpdateTime { get; set; }
-           
+
+        private List<SysDept> children = new List<SysDept>();
+        public List<SysDept> getChildren()
+        {
+            return children;
         }
+
+        public void setChildren(List<SysDept> children)
+        {
+            this.children = children;
+        }
+    }
           
 }

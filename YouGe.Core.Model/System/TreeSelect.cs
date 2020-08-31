@@ -28,14 +28,24 @@ namespace YouGe.Core.Models.System
         {
             this.id = dept.Id;
             this.label = dept.DeptName;
-            this.children = dept.getChildren().stream().map(TreeSelect::new).collect(Collectors.toList());
+            this.children = new List<TreeSelect>();
+            for (int i = 0; i < dept.getChildren().Count; i++)
+            {
+                this.children.Add(new TreeSelect());
+            }
+             //= dept.getChildren().stream().map(TreeSelect::new).collect(Collectors.toList());
         }
 
         public TreeSelect(SysMenu menu)
         {
             this.id = menu.Id;
             this.label = menu.MenuName;
-            this.children = menu.getChildren().stream().map(TreeSelect::new).collect(Collectors.toList());
+            this.children = new List<TreeSelect>();
+            for (int i = 0; i < menu.getChildren().Count; i++)
+            {
+                this.children.Add(new TreeSelect());
+            }
+            //this.children = menu.getChildren().stream().map(TreeSelect::new).collect(Collectors.toList());
         }                     
     }
 }
