@@ -65,7 +65,7 @@ namespace YouGe.Core.Repositorys.Sys
 
         public SysDept selectDeptById(long deptId)
         {
-            throw new NotImplementedException();
+           return   this.GetSingleOrDefault(u => u.Id == deptId);            
         }
 
         public int selectNormalChildrenDeptById(long deptId)
