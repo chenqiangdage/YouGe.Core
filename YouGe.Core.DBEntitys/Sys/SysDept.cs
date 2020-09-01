@@ -17,7 +17,7 @@ namespace YouGe.Core.DBEntitys.Sys
             /// 父部门id
             /// </summary>
             [Column("parent_id")]
-            public string ParentId { get; set; }
+            public long ParentId { get; set; }
             /// <summary>
             /// 祖级列表
             /// </summary>

@@ -14,14 +14,18 @@ using System.Threading.Tasks;
 using YouGe.Core.DbContexts;
 using System.Linq.Expressions;
 using YouGe.Core.Commons;
+using MySql.Data.MySqlClient;
+using System.Linq;
 
 namespace YouGe.Core.Repositorys.Sys
 {
    public  class SysDeptRepository : BaseRepository<SysDept, int>, ISysDeptRepository
     {
         private YouGeDbContextOption option { get; set; }
+        public IYouGeDbContext _dataContext;
         public SysDeptRepository(IYouGeDbContext dbContext) : base(dbContext)
         {
+            _dataContext = dbContext;
             option = (YouGeDbContextOption)DbContext.Option;
         }
         /// <summary>
@@ -32,13 +36,13 @@ namespace YouGe.Core.Repositorys.Sys
         public List<SysDept> selectDeptList(SysDept dept)
         {
             Expression<Func<SysDept, bool>> express = i => 1 == 1;
-            if (!string.IsNullOrEmpty(dept.ParentId))
+            if (0!=dept.ParentId)
             {
                 express = express.AndAlso(e => e.ParentId ==dept.ParentId);
             }
             if (!string.IsNullOrEmpty(dept.DeptName))
             {
-                express = express.AndAlso(e => e.DeptName.Contains( dept.ParentId));
+                express = express.AndAlso(e => e.DeptName.Contains( dept.DeptName));
             }
             if (dept.Status.ToString() != "")
             {
@@ -48,19 +52,26 @@ namespace YouGe.Core.Repositorys.Sys
             return (List<SysDept>)this.Get(express);
         }
 
-        public List<SysDept> buildDeptTree(List<SysDept> depts)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<TreeSelect> buildDeptTreeSelect(List<SysDept> depts)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public List<int> selectDeptListByRoleId(long roleId)
         {
-            throw new NotImplementedException();
+
+            StringBuilder sql = new StringBuilder();
+            sql.Append(@"select d.dept_id, d.parent_id
+		from sys_dept d
+            left join sys_role_dept rd on d.dept_id = rd.dept_id
+        where rd.role_id = @roleId
+        	and d.dept_id not in (select d.parent_id from sys_dept d inner join sys_role_dept rd on d.dept_id = rd.dept_id and rd.role_id = @roleId)
+		order by d.parent_id, d.order_num");
+
+            MySqlParameter[] parametera = new MySqlParameter[1]{
+                new MySqlParameter("userId", MySqlDbType.Int64)
+            };
+            parametera[0].Value = roleId;
+
+            List<SysDept> models = _dataContext.GetDatabase().SqlQuery<SysDept>(sql.ToString(), parametera);
+            return models.Select(u => u.Id).ToList();
         }
 
         public SysDept selectDeptById(long deptId)
@@ -70,7 +81,14 @@ namespace YouGe.Core.Repositorys.Sys
 
         public int selectNormalChildrenDeptById(long deptId)
         {
-            throw new NotImplementedException();
+            StringBuilder sql = new StringBuilder();
+            sql.Append(@" select count(*) as tcount  from sys_dept where status = 0 and del_flag = '0' and find_in_set(@deptId, ancestors)");
+            MySqlParameter[] parametera = new MySqlParameter[1]{
+                new MySqlParameter("userId", MySqlDbType.Int64)
+            };
+            parametera[0].Value = deptId;
+            DBCount models = _dataContext.GetDatabase().SqlQuery<DBCount>(sql.ToString(), parametera).FirstOrDefault();
+            return (models != null)? models.Tcount : 0;
         }
 
         public bool hasChildByDeptId(long deptId)
@@ -83,14 +101,15 @@ namespace YouGe.Core.Repositorys.Sys
             throw new NotImplementedException();
         }
 
-        public string checkDeptNameUnique(SysDept dept)
+        public SysDept checkDeptNameUnique(string deptName,long deptParentId)
         {
-            throw new NotImplementedException();
+           return  this.GetSingleOrDefault(u => u.DeptName == deptName && u.ParentId == deptParentId);
         }
 
         public int insertDept(SysDept dept)
         {
-            throw new NotImplementedException();
+           return this.Add(dept);
+          //  throw new NotImplementedException();
         }
 
         public int updateDept(SysDept dept)
