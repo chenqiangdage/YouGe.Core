@@ -55,7 +55,7 @@ namespace YouGe.Core.Interface.IRepositorys.Sys
          * @param deptId 部门ID
          * @return 结果
          */
-        public bool hasChildByDeptId(long deptId);
+        public int hasChildByDeptId(long deptId);
 
         /**
          * 查询部门是否存在用户
@@ -63,7 +63,7 @@ namespace YouGe.Core.Interface.IRepositorys.Sys
          * @param deptId 部门ID
          * @return 结果 true 存在 false 不存在
          */
-        public bool checkDeptExistUser(long deptId);
+        public int checkDeptExistUser(long deptId);
 
         /**
          * 校验部门名称是否唯一

@@ -65,12 +65,12 @@ namespace YouGe.Core.Repositorys.Sys
         	and d.dept_id not in (select d.parent_id from sys_dept d inner join sys_role_dept rd on d.dept_id = rd.dept_id and rd.role_id = @roleId)
 		order by d.parent_id, d.order_num");
 
-            MySqlParameter[] parametera = new MySqlParameter[1]{
+            MySqlParameter[] parameters = new MySqlParameter[1]{
                 new MySqlParameter("userId", MySqlDbType.Int64)
             };
-            parametera[0].Value = roleId;
+            parameters[0].Value = roleId;
 
-            List<SysDept> models = _dataContext.GetDatabase().SqlQuery<SysDept>(sql.ToString(), parametera);
+            List<SysDept> models = _dataContext.GetDatabase().SqlQuery<SysDept>(sql.ToString(), parameters);
             return models.Select(u => u.Id).ToList();
         }
 
@@ -82,7 +82,7 @@ namespace YouGe.Core.Repositorys.Sys
         public int selectNormalChildrenDeptById(long deptId)
         {
             StringBuilder sql = new StringBuilder();
-            sql.Append(@" select count(*) as tcount  from sys_dept where status = 0 and del_flag = '0' and find_in_set(@deptId, ancestors)");
+            sql.Append(@" select count(*) as Tcount  from sys_dept where status = 0 and del_flag = '0' and find_in_set(@deptId, ancestors)");
             MySqlParameter[] parametera = new MySqlParameter[1]{
                 new MySqlParameter("userId", MySqlDbType.Int64)
             };
@@ -91,14 +91,32 @@ namespace YouGe.Core.Repositorys.Sys
             return (models != null)? models.Tcount : 0;
         }
 
-        public bool hasChildByDeptId(long deptId)
+        public int hasChildByDeptId(long deptId)
         {
-            throw new NotImplementedException();
+            StringBuilder sql = new StringBuilder();
+            sql.Append(@"  select count(1) as Tcount from sys_dept
+        where del_flag = '0' and parent_id = @deptId");
+            MySqlParameter[] parameters = new MySqlParameter[1]{
+                new MySqlParameter("deptId", MySqlDbType.Int64)
+            };
+            parameters[0].Value = deptId;
+            DBCount models = _dataContext.GetDatabase().SqlQuery<DBCount>(sql.ToString(), parameters).FirstOrDefault();
+            return (models != null) ? models.Tcount : 0;
+           
+             
         }
 
-        public bool checkDeptExistUser(long deptId)
+        public int checkDeptExistUser(long deptId)
         {
-            throw new NotImplementedException();
+            StringBuilder sql = new StringBuilder();
+            sql.Append(@"   select count(1) as Tcount from sys_user where dept_id = @deptId and del_flag = '0'");
+            MySqlParameter[] parameters = new MySqlParameter[1]{
+                new MySqlParameter("deptId", MySqlDbType.Int64)
+            };
+            parameters[0].Value = deptId;
+            DBCount models = _dataContext.GetDatabase().SqlQuery<DBCount>(sql.ToString(), parameters).FirstOrDefault();
+            return (models != null) ? models.Tcount : 0;
+           
         }
 
         public SysDept checkDeptNameUnique(string deptName,long deptParentId)
@@ -109,17 +127,25 @@ namespace YouGe.Core.Repositorys.Sys
         public int insertDept(SysDept dept)
         {
            return this.Add(dept);
-          //  throw new NotImplementedException();
+          
         }
 
         public int updateDept(SysDept dept)
         {
-            throw new NotImplementedException();
+           return  this.Update(dept);
+             
         }
 
         public int deleteDeptById(long deptId)
         {
-            throw new NotImplementedException();
+            StringBuilder sql = new StringBuilder();
+            sql.Append(@"   update sys_dept set del_flag = '2' where dept_id = @deptId");
+            MySqlParameter[] parameters = new MySqlParameter[1]{
+                new MySqlParameter("deptId", MySqlDbType.Int64)
+            };
+            parameters[0].Value = deptId;
+            return this.ExecuteSql(sql.ToString(),parameters);
+             
         }
         /// <summary>
         /// 根据ID查询所有子部门
@@ -130,11 +156,11 @@ namespace YouGe.Core.Repositorys.Sys
         {
             StringBuilder sql = new StringBuilder();
             sql.Append(@" select * from sys_dept where find_in_set(@deptId, ancestors)");
-            MySqlParameter[] parametera = new MySqlParameter[1]{
-                new MySqlParameter("userId", MySqlDbType.Int64)
+            MySqlParameter[] parameters = new MySqlParameter[1]{
+                new MySqlParameter("deptId", MySqlDbType.Int64)
             };
-            parametera[0].Value = deptId;
-             List <SysDept> models = _dataContext.GetDatabase().SqlQuery<SysDept>(sql.ToString(), parametera);
+            parameters[0].Value = deptId;
+             List <SysDept> models = _dataContext.GetDatabase().SqlQuery<SysDept>(sql.ToString(), parameters);
             return models;
         }
 

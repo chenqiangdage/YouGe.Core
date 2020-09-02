@@ -172,7 +172,8 @@ namespace YouGe.Core.Services.Sys
         /// <returns></returns>
         public bool hasChildByDeptId(long deptId)
         {
-            return sysDeptRepository.hasChildByDeptId(deptId);
+            int result =  sysDeptRepository.hasChildByDeptId(deptId);
+            return result > 0 ? true : false;
         }
         /// <summary>
         /// 
@@ -181,7 +182,8 @@ namespace YouGe.Core.Services.Sys
         /// <returns></returns>
         public bool checkDeptExistUser(long deptId)
         {
-            return sysDeptRepository.checkDeptExistUser(deptId);
+            int result = sysDeptRepository.checkDeptExistUser(deptId);
+            return result > 0 ? true : false;
         }
         /// <summary>
         /// 
