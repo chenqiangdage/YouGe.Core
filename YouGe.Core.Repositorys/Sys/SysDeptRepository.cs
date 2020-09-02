@@ -121,5 +121,62 @@ namespace YouGe.Core.Repositorys.Sys
         {
             throw new NotImplementedException();
         }
+        /// <summary>
+        /// 根据ID查询所有子部门
+        /// </summary>
+        /// <param name="deptId">部门ID</param>
+        /// <returns>部门列表</returns>
+        public List<SysDept> selectChildrenDeptById(long deptId)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.Append(@" select * from sys_dept where find_in_set(@deptId, ancestors)");
+            MySqlParameter[] parametera = new MySqlParameter[1]{
+                new MySqlParameter("userId", MySqlDbType.Int64)
+            };
+            parametera[0].Value = deptId;
+             List <SysDept> models = _dataContext.GetDatabase().SqlQuery<SysDept>(sql.ToString(), parametera);
+            return models;
+        }
+
+        /// <summary>
+        /// 修改子元素关系
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public int updateDeptChildren(List<SysDept> depts)
+        {
+            StringBuilder sql = new StringBuilder();
+            sql.Append(@"  update sys_dept set ancestors = ");
+            foreach(var item in depts )
+            {
+                sql.Append( string.Format(@"  case dept_id  when {0} then {1} end ", item.Id, item.Ancestors));
+            }
+            sql.Append(@"   where dept_id in ( ");
+            for (int i = 0;i<  depts.Count;i++)
+            {
+                if (i + 1 == depts.Count)
+                {
+                    sql.Append(string.Format(@" {0} ", depts[i].Id));
+                }
+                else
+                {
+                    sql.Append(string.Format(@" {0},", depts[i].Id));
+                }
+            }
+            sql.Append(@" ) ");
+
+           return  this.ExecuteSql(sql.ToString());
+        }
+
+        /// <summary>
+        /// 修改所在部门的父级部门状态
+        /// </summary>
+        /// <param name="dept"></param>
+        public void updateDeptStatus(SysDept dept)
+        {
+            this.Update(dept);
+        }
+
     }
 }

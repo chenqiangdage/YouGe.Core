@@ -213,7 +213,7 @@ namespace YouGe.Core.Services.Sys
             {
                 throw new CustomException("部门停用，不允许新增");
             }
-            dept.Ancestors =info.Ancestors + "," + dept.ParentId);
+            dept.Ancestors =info.Ancestors + "," + dept.ParentId;
         
             return sysDeptRepository.insertDept(dept);
         }

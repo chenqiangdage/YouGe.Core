@@ -35,6 +35,12 @@ namespace YouGe.Core.Interface.IRepositorys.Sys
          */
         public SysDept selectDeptById(long deptId);
 
+        /// <summary>
+        /// 根据ID查询所有子部门
+        /// </summary>
+        /// <param name="deptId"></param>
+        /// <returns></returns>
+        public List<SysDept> selectChildrenDeptById(long deptId);
         /**
          * 根据ID查询所有子部门（正常状态）
          * 
@@ -65,7 +71,7 @@ namespace YouGe.Core.Interface.IRepositorys.Sys
          * @param dept 部门信息
          * @return 结果
          */
-        public string checkDeptNameUnique(string DeptName, long ParentId);
+        public SysDept checkDeptNameUnique(string DeptName, long ParentId);
 
         /**
          * 新增保存部门信息
@@ -82,7 +88,19 @@ namespace YouGe.Core.Interface.IRepositorys.Sys
          * @return 结果
          */
         public int updateDept(SysDept dept);
+        /// <summary>
+        /// 修改子元素关系
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public int updateDeptChildren( List<SysDept> depts);
 
+        /// <summary>
+        /// 修改所在部门的父级部门状态
+        /// </summary>
+        /// <param name="dept"></param>
+        public void updateDeptStatus(SysDept dept);
         /**
          * 删除部门管理信息
          * 
