@@ -120,7 +120,8 @@ namespace YouGe.Core.ManagerApi.Controllers
     [HttpPost("add")]
     public AjaxReponseBase Add([FromBody] SysDictData dict)
     {
-        dict.AjaxReponseBase(SecurityUtils.getUsername());
+            string username=SecurityUtils.getUsername(tokenService, httpContextAccessor.HttpContext.Request);
+        dict.CreateBy =(username);
         return toAjax(dictDataService.insertDictData(dict));
     }
 
@@ -132,7 +133,8 @@ namespace YouGe.Core.ManagerApi.Controllers
     [HttpPut]
     public AjaxReponseBase edit([FromBody] SysDictData dict)
     {
-        dict.setUpdateBy(SecurityUtils.getUsername());
+            string username = SecurityUtils.getUsername(tokenService, httpContextAccessor.HttpContext.Request);
+            dict.UpdateBy =(username);
         return toAjax(dictDataService.updateDictData(dict));
     }
 
