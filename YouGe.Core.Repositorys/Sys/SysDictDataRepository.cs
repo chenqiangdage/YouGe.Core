@@ -35,8 +35,21 @@ namespace YouGe.Core.Repositorys.Sys
         /// <returns></returns>
         public List<SysDictData> selectDictDataList(SysDictData dictData)
         {
-            //
-            throw new NotImplementedException();
+            Expression<Func<SysDictData, bool>> express = i => 1 == 1;
+            if(!string.IsNullOrEmpty(dictData.DictType))
+            {
+                express = express.AndAlso(e => e.DictType == dictData.DictType);
+            }
+            if (!string.IsNullOrEmpty(dictData.DictLabel))
+            {
+                express = express.AndAlso(e => e.DictLabel == dictData.DictLabel);
+            }
+            if (!string.IsNullOrEmpty(dictData.status.ToString()))
+            {
+                express = express.AndAlso(e => e.status == dictData.status);
+            }
+            return (List<SysDictData>)this.Get(express);
+            
         }
         /// <summary>
         /// 
